@@ -356,6 +356,7 @@
   .np-numbers dt { font-family: var(--display); font-size: calc(clamp(2rem, 3.6vw, 2.8rem) + 2px); line-height: 1; font-variant-numeric: lining-nums; color: #b02a20; text-align: center; }
   .np-numbers dd { text-align: center; }
   .np-numbers dd { margin: 0; font-size: 0.88rem; line-height: 1.3; }
+  .np-numbers dl > div.wide { grid-column: 1 / -1; min-height: 0; }
   .np-cols { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 1.8rem; margin-top: 1.4rem; padding-top: 1.1rem; border-top: 3px double var(--ink); }
   .np-col + .np-col { border-left: 1px solid var(--rule); padding-left: 1.8rem; }
   .np-col p { margin: 0 0 0.85rem; font-size: 1.02rem; line-height: 1.55; }
@@ -1187,13 +1188,18 @@
   .visitor.heard .v-tap::before { content: "✓ "; }
   .voices.ready .visitor:not(.heard) .v-hit { cursor: pointer; }
   @media (max-width: 860px) { .v-tap { font-size: 0.28rem; } }
-  /* every section heading sits on a soft dark panel (about 40%, edges blurred away) with a firm text shadow,
-     so the light lettering stays bright over any part of the shop */
-  .stop-head { position: relative; isolation: isolate; }
-  .stop-head::before { content: ""; position: absolute; z-index: -1; inset: -0.9rem -1.6rem -0.9rem; pointer-events: none;
-    border-radius: 48px; background: rgba(var(--scrim), 0.42); filter: blur(16px); }
-  .stop-head .eyebrow, .stop-head h2, .stop-head p { text-shadow: 0 2px 4px rgba(var(--scrim), 0.85), 0 0 16px rgba(var(--scrim), 0.55); }
-  @media (max-width: 640px) { .stop-head::before { inset: -0.7rem -0.6rem -0.7rem; border-radius: 32px; filter: blur(12px); } }
+  /* every section heading sits in a deep, wide pool of shade: darkest behind the text, fading to fully clear
+     both sideways and up and down. It reaches further up and out than down, so the content below stays bright. */
+  .stop-head { position: relative; isolation: isolate; --sh-x: 18rem; --sh-t: 12rem; --sh-b: 7rem; }
+  .stop-head::before { content: ""; position: absolute; z-index: -1; pointer-events: none;
+    top: calc(-1 * var(--sh-t)); bottom: calc(-1 * var(--sh-t)); left: calc(-1 * var(--sh-x)); right: calc(-1 * var(--sh-x));
+    background: radial-gradient(ellipse closest-side, rgba(var(--scrim), 0.92) 0%, rgba(var(--scrim), 0.85) 30%, rgba(var(--scrim), 0.6) 55%, rgba(var(--scrim), 0.28) 78%, rgba(var(--scrim), 0.08) 92%, rgba(var(--scrim), 0) 100%);
+    /* the lower half fades out sooner, so the content below the heading stays bright */
+    -webkit-mask-image: linear-gradient(#000 calc(100% - var(--sh-t)), transparent calc(100% - var(--sh-t) + var(--sh-b)));
+    mask-image: linear-gradient(#000 calc(100% - var(--sh-t)), transparent calc(100% - var(--sh-t) + var(--sh-b))); }
+  .stop-head .eyebrow, .stop-head h2, .stop-head p { text-shadow: 0 2px 6px rgba(0, 0, 0, 0.95), 0 0 28px rgba(0, 0, 0, 0.8); }
+  .stop-head p { color: #fbf3e2; }
+  @media (max-width: 640px) { .stop-head { --sh-x: 6rem; --sh-t: 8rem; --sh-b: 4.5rem; } }
   /* Phones: the board sits exactly within the screen, stickers clear the "Reach out" note,
      and the polaroids, birthday card and globe are laid out evenly along the bottom */
   @media (max-width: 860px) {
@@ -1238,11 +1244,28 @@
     .voices .visitor.v2 .v-tag { top: 24%; left: 52%; transform: translateX(-50%) rotate(3deg); }
   }
   /* Expertise heading and the drawer hint: a stronger underlay and shadow (they sit over the brightest wall) */
-  #expertise .stop-head::before { background: rgba(var(--scrim), 0.55); }
-  #expertise .stop-head .eyebrow, #expertise .stop-head h2, #expertise .stop-head p { text-shadow: 0 2px 5px rgba(var(--scrim), 0.95), 0 0 20px rgba(var(--scrim), 0.72); }
   .tb-hint { position: relative; isolation: isolate; display: table; margin-left: auto; margin-right: auto; padding: 0.2rem 1rem;
     text-shadow: 0 2px 5px rgba(var(--scrim), 0.95), 0 0 20px rgba(var(--scrim), 0.72); }
   .tb-hint::before { content: ""; position: absolute; z-index: -1; inset: -0.5rem -1rem; border-radius: 40px; background: rgba(var(--scrim), 0.55); filter: blur(12px); pointer-events: none; }
+  /* Case IV "Work we've done": all four pieces on one page, 2 x 2, each with its caption and a small handwritten note underneath */
+  .ex4 { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.6cqw 5cqw; align-items: start; margin-top: 1.4cqw; }
+  .dense .ex4-more.ex4-more { margin: 0.2cqw 0 0; padding-left: 5cqw; font-family: var(--hand); font-size: 2.9cqw; line-height: 1.2; color: var(--pen); transform: rotate(-1deg); transform-origin: left; }
+  .ex4-cell { margin: 0; min-width: 0; display: grid; gap: 0.9cqw; align-content: start; }
+  .ex4-cell .vtile { margin: 0; } .ex4-cell .vtile figcaption { display: none; }
+  .ex4-cell .vtile .shot img, .ex4-shot img { display: block; width: 100%; aspect-ratio: 16 / 9.2; object-fit: cover; border: 1cqw solid #fbf6ea; box-sizing: border-box; box-shadow: 0 0.8cqw 2cqw rgba(40, 25, 10, 0.4); }
+  .ex4-cell:nth-child(odd) > :first-child { transform: rotate(-0.8deg); } .ex4-cell:nth-child(even) > :first-child { transform: rotate(0.7deg); }
+  .ex4-shot { padding: 0; border: 0; background: none; cursor: zoom-in; display: block; width: 100%; }
+  .ex4-shot img { object-position: top; }
+  .ex4-cap { margin: 0.3cqw 0 0; font-size: 2.2cqw; line-height: 1.35; color: var(--ink-soft); }
+  .ex4-cap b { font-weight: 800; letter-spacing: 0.08em; text-transform: uppercase; color: var(--pen); font-size: 0.9em; }
+  .ex4-cap .me { font-family: var(--hand); color: var(--pen); font-size: 1.2em; white-space: nowrap; }
+  .ex4-note { margin: 0; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: start; gap: 1cqw; font-family: var(--hand); font-size: 2.45cqw; line-height: 1.25; color: var(--pen); }
+  .ex4-note svg { width: 2.2cqw; height: 3cqw; margin-top: 0.2cqw; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+  .ex4-art { display: grid; gap: 0.5cqw; padding: 1cqw; text-decoration: none; color: var(--ink); background: #fbf6ea; border: 1px solid rgba(21, 17, 13, 0.55); box-shadow: 0 0.8cqw 2cqw rgba(40, 25, 10, 0.35); box-sizing: border-box; }
+  .ex4-art img { display: block; width: 100%; aspect-ratio: 16 / 6.4; object-fit: cover; }
+  .ex4-art .lc-site { font-size: 1.7cqw; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-soft); line-height: 1.2; }
+  .ex4-art b { font-family: var(--display); font-weight: 400; font-size: 2.9cqw; line-height: 1.05; color: var(--ink); }
+  .ex4-art .lc-go { font-size: 1.8cqw; font-weight: 800; letter-spacing: 0.06em; text-transform: uppercase; color: var(--pen); }
 </style>
 
 <canvas id="scene" aria-hidden="true"></canvas>
@@ -1315,13 +1338,13 @@
         <div class="ticket pinned" style="--r:2.2deg"><i class="pin" style="--pc:#2f4466"></i><small>Education &amp; certifications</small><span class="edu-item"><b>MBA</b>KU Leuven</span><span class="edu-item"><b>Bachelor in Business Management</b>UC Leuven-Limburg (UCLL)</span><span class="edu-item"><b>Certificate in Management Excellence</b>Vlerick Business School</span></div>
         <div class="signpost pinned" style="--r:-1.5deg"><span class="sp-title">I speak</span><svg class="signpost-art" viewBox="0 0 300 390" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Signpost: English, Russian, Dutch, French"><rect x="141" y="8" width="18" height="372" rx="6" fill="#c9c2b6" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><circle cx="150" cy="10" r="10" fill="#e8892e" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><g transform="translate(0 30) rotate(-3 150 48)"><path d="M38 28 H270 L292 48 L270 68 H38 Z" fill="#ffe066" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><g transform="translate(48 36)"><rect width="36" height="24" fill="#2b3f8f" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="2"/><path d="M0 0 L36 24 M36 0 L0 24" stroke="#fff" stroke-width="5"/><path d="M0 0 L36 24 M36 0 L0 24" stroke="#d62b35" stroke-width="2"/><path d="M18 0 V24 M0 12 H36" stroke="#fff" stroke-width="8"/><path d="M18 0 V24 M0 12 H36" stroke="#d62b35" stroke-width="4.5"/><rect width="36" height="24" fill="none" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="2"/></g><text x="164" y="56" text-anchor="middle" font-family="Garet, sans-serif" font-weight="800" font-size="17" letter-spacing="0.5" fill="#1d1510">ENGLISH</text></g><g transform="translate(0 72) rotate(2.5 150 100)"><path d="M30 80 H262 V120 H30 L8 100 Z" fill="#ffa8c8" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><g transform="translate(40 88)"><rect x="0" y="0" width="36" height="8" fill="#ffffff"/><rect x="0" y="8" width="36" height="8" fill="#1c4fb8"/><rect x="0" y="16" width="36" height="8" fill="#d62b35"/><rect width="36" height="24" fill="none" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="2"/></g><text x="172" y="108" text-anchor="middle" font-family="Garet, sans-serif" font-weight="800" font-size="17" letter-spacing="0.5" fill="#1d1510">РУССКИЙ</text></g><g transform="translate(0 114) rotate(-2 150 152)"><path d="M38 132 H270 L292 152 L270 172 H38 Z" fill="#9fc9f5" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><g transform="translate(48 140)"><rect x="0" y="0" width="36" height="8" fill="#c8202e"/><rect x="0" y="8" width="36" height="8" fill="#ffffff"/><rect x="0" y="16" width="36" height="8" fill="#21468b"/><rect width="36" height="24" fill="none" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="2"/></g><text x="164" y="160" text-anchor="middle" font-family="Garet, sans-serif" font-weight="800" font-size="17" letter-spacing="0.5" fill="#1d1510">NEDERLANDS</text></g><g transform="translate(0 156) rotate(3 150 204)"><path d="M30 184 H262 V224 H30 L8 204 Z" fill="#a6e3c4" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><g transform="translate(40 192)"><rect x="0" y="0" width="12" height="24" fill="#1f3c96"/><rect x="12" y="0" width="12" height="24" fill="#ffffff"/><rect x="24" y="0" width="12" height="24" fill="#e1262f"/><rect width="36" height="24" fill="none" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="2"/></g><text x="172" y="212" text-anchor="middle" font-family="Garet, sans-serif" font-weight="800" font-size="17" letter-spacing="0.5" fill="#1d1510">FRANÇAIS</text></g></svg></div>
         <button class="egg stk" type="button" style="top:-30px;left:-30px;width:100px;--r:-12deg" aria-label="Sticker: gummy bears"><img src="img/st-gummy.png" alt="" loading="lazy"><span class="egg-note">Fun fact: I have a serious weakness for sour sweets. The sourer, the better.</span></button>
-        <button class="egg stk perfume" type="button" style="top:-34px;right:-34px;width:104px;--r:8deg" aria-label="Stickers: perfume bottles"><img src="img/st-perfume1.png" alt="" loading="lazy"><img class="p2" src="img/st-perfume2.png" alt="" loading="lazy"><span class="egg-note">Booked: a perfume workshop. Perfume is my favourite small hobby.</span></button>
+        <button class="egg stk perfume" type="button" style="top:-34px;right:-34px;width:104px;--r:8deg" aria-label="Stickers: perfume bottles"><img src="img/st-perfume1.png" alt="" loading="lazy"><img class="p2" src="img/st-perfume2.png" alt="" loading="lazy"><span class="egg-note">Booked: a perfume workshop. Perfume is my favorite small hobby.</span></button>
         <button class="egg stk polaroid" type="button" style="bottom:-96px;left:30%;width:96px;--r:-6deg" aria-label="Polaroid: Barcelona, Sagrada Família. Open the photo." data-photo="tripBarcelona"><img src="img/trip-barcelona.jpg" alt="" width="480" height="480" loading="lazy"><span class="pol-cap">Barcelona</span><span class="egg-note">Barcelona, in front of the Sagrada Família.</span></button>
         <button class="egg stk handcard" type="button" style="bottom:-70px;left:65%;width:124px;--r:5deg" aria-label="A handmade birthday card"><svg viewBox="0 0 170 120" aria-hidden="true"><path d="M8 12 C 40 4, 120 6, 164 10 L 160 112 C 110 118, 50 116, 6 110 Z" fill="#ff8fb1" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="4"/><path d="M18 22 H 82 V 100 H 18 Z" fill="#fff4e0" stroke="#1d1510" stroke-width="3" stroke-linejoin="round"/><g stroke="#1d1510" stroke-width="3" stroke-linejoin="round"><path d="M50 92 C 46 70, 52 54, 50 44" fill="none"/><circle cx="50" cy="40" r="11" fill="#ffd24a"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#ff5f5f" transform="rotate(0 50 40)"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#ff5f5f" transform="rotate(60 50 40)"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#ff5f5f" transform="rotate(120 50 40)"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#ff5f5f" transform="rotate(180 50 40)"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#ff5f5f" transform="rotate(240 50 40)"/><ellipse cx="50" cy="26" rx="6" ry="9" fill="#ff5f5f" transform="rotate(300 50 40)"/><circle cx="50" cy="40" r="6" fill="#e8892e"/><path d="M50 74 q -16 -10 -20 -2 q 8 10 20 4" fill="#4ec2a8"/></g><text x="124" y="40" text-anchor="middle" font-family="Enchanted Land, Georgia" font-size="19" fill="#1d1510">HAPPY</text><text x="124" y="60" text-anchor="middle" font-family="Enchanted Land, Georgia" font-size="19" fill="#1d1510">BIRTHDAY!</text><text x="124" y="88" text-anchor="middle" font-family="Dudu Calligraphy, cursive" font-size="13" fill="#2c4677">made by D.</text><path d="M150 98 l4 -9 4 9 -9 -6 h10 z" fill="#ffd24a" stroke="#1d1510" stroke-width="3" stroke-linejoin="round" stroke-width="2"/></svg><span class="egg-note">I make my own postcards and birthday cards. This one was posted to the shop.</span></button>
         <button class="egg stk polaroid" type="button" style="bottom:-92px;left:41.5%;width:96px;--r:4deg" aria-label="Polaroid: London. Open the photo." data-photo="tripLondon"><img src="img/trip-london.jpg" alt="" width="480" height="480" loading="lazy"><span class="pol-cap">London</span><span class="egg-note">London, Covent Garden. One of my recent trips.</span></button>
         <button class="egg stk" type="button" style="top:44%;left:-34px;width:52px;--r:-8deg" aria-label="Sticker: paintbrushes in a jar"><img src="img/st-brushes.png" alt="" loading="lazy"><span class="egg-note">I paint in acrylic. The fried eggs on the wall are mine.</span></button>
         <button class="egg stk polaroid" type="button" style="bottom:-96px;left:53%;width:96px;--r:-3deg" aria-label="Polaroid: Barcelona, the kiss mural. Open the photo." data-photo="tripKiss"><img src="img/trip-kiss.jpg" alt="" width="480" height="480" loading="lazy"><span class="pol-cap">Barcelona</span><span class="egg-note">Barcelona again, by the kiss mural, late in the evening.</span></button>
-        <button class="egg stk" type="button" style="bottom:-40px;right:3%;width:84px;--r:8deg" aria-label="Sticker: a globe, 43 cities and 3 countries"><img src="img/st-globe.png" alt="" loading="lazy"><span class="globe-tag">43 cities traveled</span><span class="egg-note">43 cities traveled so far and 3 countries I have called home. The best part is always the people.</span></button>
+        <button class="egg stk" type="button" style="bottom:-40px;right:3%;width:84px;--r:8deg" aria-label="Sticker: a globe, 46 cities and 3 countries"><img src="img/st-globe.png" alt="" loading="lazy"><span class="globe-tag">46 cities traveled</span><span class="egg-note">46 cities traveled so far and 3 countries I have called home. The best part is always the people.</span></button>
       </div>
     </div>
     </div>
@@ -1362,7 +1385,7 @@
           </figure>
           <section class="np-numbers" aria-label="By the numbers">
             <h3>By the numbers</h3>
-            <dl><div><dt>+64%</dt><dd>Applications year on year, marketing and sales combined</dd></div><div><dt>1.5M</dt><dd>Social views in three months, 89%+ from non-followers</dd></div><div><dt>+21%</dt><dd>Brand recognition across Europe, Asia and Latin America</dd></div><div><dt>65+</dt><dd>Programs: creative output managed and overseen</dd></div><div><dt>28</dt><dd>Countries with localised content</dd></div><div><dt>18+</dt><dd>External partners managed, measured and reviewed</dd></div></dl>
+            <dl><div><dt>+64%</dt><dd>Qualified international leads, year over year</dd></div><div><dt>1.5M</dt><dd>Social views in three months, 89%+ from non-followers</dd></div><div><dt>+21%</dt><dd>Brand recognition across Europe, Asia and Latin America</dd></div><div><dt>40+</dt><dd>Programs: creative output managed and overseen</dd></div><div><dt>28</dt><dd>Countries with localized content</dd></div><div><dt>18+</dt><dd>External partners (portals, agencies, creative studios, designers, videographers, media and PR) managed, measured and reviewed</dd></div><div class="wide"><dt>10+</dt><dd>Internal stakeholders aligned (program directors, professors, admissions, web, email automation and content teams)</dd></div></dl>
           </section>
         </div>
         <div class="np-cols">
@@ -1464,8 +1487,8 @@
                 <p class="bc-name">Darya Naipak</p>
                 <p class="bc-role">Product Marketing Strategic Lead</p>
                 <div class="bc-rule"></div>
-                <p class="bc-lines"><span>darya.naipak@gmail.com</span><span>linkedin.com/in/darya-naipak</span><span>+32 484 12 52 96</span></p>
-                <p class="bc-foot">Belgium · open to relocating and travelling</p>
+                <p class="bc-lines"><span>naipak.darya.be@gmail.com</span><span>linkedin.com/in/darya-naipak</span><span>+32 484 12 52 96</span></p>
+                <p class="bc-foot">Belgium · open to relocating and traveling</p>
               </div>
               <div class="bc-face bc-back">
                 <p class="bc-q">Got a story to tell?</p>
@@ -1481,7 +1504,7 @@
     <div class="card-actions">
       <button class="btn primary" id="takeCard" type="button">Take the card</button>
       <button class="btn" id="flipCard" type="button" hidden>Turn it over</button>
-      <button class="btn" type="button" data-copy="darya.naipak@gmail.com">Copy email</button>
+      <button class="btn" type="button" data-copy="naipak.darya.be@gmail.com">Copy email</button>
       <button class="btn" type="button" data-copy="+32 484 12 52 96">Copy phone number</button>
       <a class="btn" href="https://www.linkedin.com/in/darya-naipak" target="_blank" rel="noopener">Open LinkedIn</a>
     </div>
@@ -1548,7 +1571,7 @@ const ARROW_DOWN = '<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M4 4 C 
 const ARROW_LEFT = '<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M36 6 C 26 4, 12 10, 6 20"/><path d="M5 12 L6 21 L14 19"/></svg>';
 const ARROW_UP = '<svg viewBox="0 0 40 30" aria-hidden="true"><path d="M4 26 C 14 26, 26 20, 30 6"/><path d="M24 10 L30 5 L34 12"/></svg>';
 const ch = t => `<h4 class="ch">${t}</h4>`;
-/* Illustrated process flow: phases with a coloured rail, numbered steps, key steps filled in ink */
+/* Illustrated process flow: phases with a colored rail, numbered steps, key steps filled in ink */
 const flow = (phases, start = 1) => { let n = start; return `<div class="flow">${phases.map(ph => `<div class="flow-phase" style="--pc:${ph.c}"><span class="flow-tag">${ph.t}</span><ol class="flow-steps">${ph.steps.map(st =>
   `<li class="flow-step${st.key ? ' key' : ''}"><span class="flow-num">${n++}</span><div class="flow-txt"><b>${st.t}</b><span>${st.d}</span></div></li>`).join('')}</ol></div>`).join('')}</div>`; };
 /* Before/after bars and a ten-dot counter, drawn in the same ink */
@@ -1579,7 +1602,7 @@ const VIDEOS = {
 const openLink = (id, text) => `<button type="button" class="inline-open" data-brochure="${id}">${text}</button>`;
 
 const BROCHURES = {
-  boarding: { title: 'Personalised welcome letter: boarding pass', pages: ['brochures/boarding/p-1.jpg', 'brochures/boarding/p-2.jpg'] },
+  boarding: { title: 'Personalized welcome letter: boarding pass', pages: ['brochures/boarding/p-1.jpg', 'brochures/boarding/p-2.jpg'] },
   checklist: { title: 'Moving to Belgium checklist', pages: ['brochures/checklist/p-1.jpg'] },
   stickers: { title: 'Welcome stickers', pages: ['brochures/stickers/p-1.jpg'] },
   guide: { title: 'The Vlerick Guide to Belgium', pages: ['brochures/guide/p-01.jpg', 'brochures/guide/p-02.jpg', 'brochures/guide/p-03.jpg', 'brochures/guide/p-04.jpg', 'brochures/guide/p-05.jpg', 'brochures/guide/p-06.jpg', 'brochures/guide/p-07.jpg', 'brochures/guide/p-08.jpg', 'brochures/guide/p-09.jpg', 'brochures/guide/p-10.jpg', 'brochures/guide/p-11.jpg', 'brochures/guide/p-12.jpg', 'brochures/guide/p-13.jpg', 'brochures/guide/p-14.jpg', 'brochures/guide/p-15.jpg', 'brochures/guide/p-16.jpg', 'brochures/guide/p-17.jpg', 'brochures/guide/p-18.jpg', 'brochures/guide/p-19.jpg', 'brochures/guide/p-20.jpg', 'brochures/guide/p-21.jpg', 'brochures/guide/p-22.jpg', 'brochures/guide/p-23.jpg', 'brochures/guide/p-24.jpg', 'brochures/guide/p-25.jpg', 'brochures/guide/p-26.jpg', 'brochures/guide/p-27.jpg', 'brochures/guide/p-28.jpg'] },
@@ -1597,11 +1620,11 @@ const BROCHURES = {
 const CASES = [
   {
     num: 'I', title: 'Welcome Package', spine: 'Welcome Package', color: '#5b2328',
-    blurb: 'Closing the admit-to-enrol gap with a pre-arrival journey', result: '+9.5% registrations',
+    blurb: 'Closing the admit-to-enroll gap with a pre-arrival journey', result: '+9.5% registrations',
     learned: 'Peer-generated, hyper-local content outperformed institutional messaging. Tips from current students built familiarity and trust before arrival.',
     pages: [
       intro('Designed to create an emotional connection with the school before day one.', ['+9.5%', 'registrations (tuition paid), 2025 intake compared with 2024'], 'Vlerick Business School, with Admissions, the International Office and Web'),
-      `<div class="dense">${ch('The brief')}<p class="dc">A share of admitted candidates never converted to paid enrolment: <span class="u">the most expensive leak in the funnel</span>, because acquisition cost was already spent.</p>
+      `<div class="dense">${ch('The brief')}<p class="dc">A share of admitted candidates never converted to paid enrollment: <span class="u">the most expensive leak in the funnel</span>, because acquisition cost was already spent.</p>
        ${note('Already paid to win them. Losing them here hurts most.', 'r', ARROW_UP)}
        ${ch('The insight')}<p>After admission, decision risk peaks: cost, relocation and career return, often weighed against a competing offer. <b>Remove that friction before it turns into drop-off.</b></p>
        ${ch('My role')}<p>I mapped every moment between “admitted” and “day one”, gave each one its own touchpoint, and delivered it with Admissions, the International Office and Web.</p></div>`,
@@ -1630,7 +1653,7 @@ const CASES = [
   {
     num: 'II', title: 'Content Overhaul', spine: 'Content Overhaul', color: '#2f4636',
     blurb: 'Collateral and landing pages rebuilt for short attention spans', result: '+28% time on landing pages',
-    learned: 'Prioritise, then route. A brochure that hands off to the landing page extends reach across every channel instead of closing the conversation.',
+    learned: 'Prioritize, then route. A brochure that hands off to the landing page extends reach across every channel instead of closing the conversation.',
     pages: [
       intro('Collateral and landing pages rebuilt for short attention spans.', ['+28%', 'average time on program landing pages, and +78% brochure downloads'], 'Vlerick Business School, across the Masters portfolio'),
       `<div class="dense">${ch('The brief')}<p class="dc">Legacy brochures and landing pages were <b>text-dense and inconsistent</b>, driving drop-off and repeat enquiries for information that was already published.</p>
@@ -1642,14 +1665,14 @@ const CASES = [
       `${ch('How I rebuilt it')}${flow([
         { t: 'Diagnose', c: '#9c3a2d', steps: [{ t: 'Audit', d: 'Text-dense pages and repeat enquiries.', key: 1 }] },
         { t: 'Rebuild', c: '#2c4677', steps: [
-          { t: 'Prioritise', d: 'Rankings and accreditations move up front.' },
+          { t: 'Prioritize', d: 'Rankings and accreditations move up front.' },
           { t: 'Rewrite', d: 'Scannable “What can you expect?” blocks and a student quote.' },
           { t: 'Redesign', d: 'One visual hierarchy across the Masters portfolio.' }] },
         { t: 'Route', c: '#4f7a4a', steps: [
           { t: 'Hand off', d: 'Every brochure points to its program page.' },
           { t: 'Result', d: '+28% time on page, +78% downloads.', key: 1 }] }])}`,
       `<div class="ba"><div class="ba-col">${ch('Before')}${brochure('mmdt', 'Masters in Marketing & Digital Transformation brochure, before', '40cqw')}</div><div class="ba-col">${ch('After')}${brochure('mms', 'Masters in Marketing Strategy brochure, after', '40cqw')}</div></div>
-       <div class="ba-notes"><ul class="hand-list minus"><li>Copy-heavy spreads, like a course catalogue</li><li>Rankings and proof buried mid-page</li><li>No clear next step for the reader</li></ul>
+       <div class="ba-notes"><ul class="hand-list minus"><li>Copy-heavy spreads, like a course catalog</li><li>Rankings and proof buried mid-page</li><li>No clear next step for the reader</li></ul>
        <ul class="hand-list plus"><li>Rankings and accreditations up front</li><li>Scannable “What can you expect?” blocks and a student quote</li><li>Routes the reader to the program page</li></ul></div>`,
       `${ch('Experience Vlerick')}<p><b>After the content overhaul, I noted a gap at portfolio level.</b> So I built a proposition piece that sells Masters-level USPs rather than individual programs, deployed at international fairs, in partner pitches and on the general Masters page.</p>
        ${brochure('experience', 'Experience Vlerick Business School brochure', '56cqw')}`
@@ -1658,7 +1681,7 @@ const CASES = [
   {
     num: 'III', title: "The Master's Campaign", spine: "The Master's Campaign", color: '#2c3650',
     blurb: 'Four-month video campaign with EDUNAKHO, from brief to final cut', result: '4 films · ~30 people',
-    learned: 'Always have a plan B: an extra speaker, an alternative location. A speaker cancelled at the last minute; because stand-by participants were already confirmed, the shoot ran to plan.',
+    learned: 'Always have a plan B: an extra speaker, an alternative location. A speaker canceled at the last minute; because stand-by participants were already confirmed, the shoot ran to plan.',
     pages: [
       intro('A four-month, large-investment campaign to build audience and awareness for the Masters programs.', ['4 films', 'about 30 people coordinated'], 'Produced with EDUNAKHO, filmed in Ghent and Brussels'),
       `<p class="dc">I planned and delivered it from brief to final assets, and coordinated about 30 people: professors, students, a film crew and the production agency. Later, I built the new assets into our ongoing digital campaigns.</p>
@@ -1698,14 +1721,18 @@ const CASES = [
         { t: 'Set up', c: '#9c3a2d', steps: [{ t: 'Strategy', d: 'Reach new international prospects, not the people already following.', key: 1 }, { t: 'Brief & coach', d: 'Ambassadors learn what to film and why.' }] },
         { t: 'Create', c: '#2c4677', steps: [{ t: 'Students film & write', d: 'Their own day, their own voice. Their articles, edited by me, ran as native ads on study portals.' }, { t: 'Edit & schedule', d: 'I edit, approve and schedule every post.' }, { t: 'Pilot TikTok', d: 'Tested a new channel together with the students.' }] },
         { t: 'Reach', c: '#4f7a4a', steps: [{ t: '1.5M views', d: 'In three months, at no extra cost.', key: 1 }] }])}`,
-      `<div class="dense">${ch('Work we’ve done')}<ul class="lst"><li>“Get to know our ambassadors” series per program</li><li>“Day in the life” videos from company projects and study tours</li><li>Student articles and short videos on who the Masters is for</li></ul>
-       ${note('Students film it. I shape it. Nobody sounds like a brochure.', 'r', ARROW_UP)}
-       <div class="ex-grid">
-         ${videoTile('career', 'img/post-career.jpg', 'Career support')}
-         ${videoTile('degree', 'img/post-degree.jpg', 'Who the Masters is for <span class="me">← that’s me</span>')}
-<button type="button" class="li-post" data-brochure="linkedin" aria-label="Open the LinkedIn post about the AI study trip"><img src="img/linkedin-ai-trip.jpg" alt="LinkedIn post: Masters in Business Analytics & AI students in Amsterdam" loading="lazy"><span>LinkedIn · Amsterdam AI trip</span></button>
-         <a class="link-card" href="https://studylink.com/articles/inside-vlericks-dublin-study-trip/" target="_blank" rel="noopener"><span class="lc-site">studylink.com · student article</span><b>Inside Vlerick’s Dublin study trip</b><span class="lc-sub">Written by our students, edited by me, run as native advertising.</span><span class="lc-go">Read the article ↗</span></a>
-
+      `<div class="dense">${ch('Work we’ve done')}<ul class="lst"><li>“Get to know our ambassadors” series</li><li>“Day in the life” for company projects and study tours</li><li>Student articles as native advertising</li></ul><p class="ex4-more">…and other engaging formats</p>
+       <div class="ex4">
+         <figure class="ex4-cell">${videoTile('career', 'img/post-career.jpg', 'Career support')}
+           <p class="ex4-cap"><b>Watch ↗</b> <i>Career support</i></p>
+           <p class="ex4-note"><svg viewBox="0 0 20 30" aria-hidden="true"><path d="M10 28 L10 4 M3 11 L10 3 L17 11"/></svg><span>A seamless blend of staff and students, presenting the programs in a less authoritative way.</span></p></figure>
+         <figure class="ex4-cell">${videoTile('degree', 'img/post-degree.jpg', 'Who the Masters is for')}
+           <p class="ex4-cap"><b>Watch ↗</b> <i>Who the Masters is for</i> <span class="me">← that’s me</span></p></figure>
+         <figure class="ex4-cell"><button type="button" class="li-post ex4-shot" data-brochure="linkedin" aria-label="Open the LinkedIn post about the Amsterdam AI study trip"><img src="img/linkedin-ai-trip.jpg" alt="LinkedIn post: Masters in Business Analytics &amp; AI students in Amsterdam" loading="lazy"></button>
+           <p class="ex4-cap"><i>LinkedIn · Amsterdam AI study trip</i></p>
+           <p class="ex4-note"><svg viewBox="0 0 20 30" aria-hidden="true"><path d="M10 28 L10 4 M3 11 L10 3 L17 11"/></svg><span>Post made by students, reviewed by me and posted on the corporate account.</span></p></figure>
+         <figure class="ex4-cell"><a class="ex4-art" href="https://studylink.com/articles/inside-vlericks-dublin-study-trip/" target="_blank" rel="noopener"><img src="img/dublin-trip.jpg" alt="Vlerick students on the Dublin study trip" loading="lazy"><span class="lc-site">studylink.com · student article</span><b>Inside Vlerick’s Dublin study trip</b><span class="lc-go">Read the article ↗</span></a>
+           <p class="ex4-note"><svg viewBox="0 0 20 30" aria-hidden="true"><path d="M10 28 L10 4 M3 11 L10 3 L17 11"/></svg><span>Written by our students, edited by me, run as native advertising.</span></p></figure>
        </div></div>`,
       `<div class="anno" style="display:grid;justify-items:center">${plate('feed.jpg', 'The vlerick_masters Instagram feed', 'The real vlerick_masters feed.', '92cqw')}
         <p class="note" style="left:1cqw;top:10cqw;max-width:24cqw"><span>Student-generated content, managed and curated by me</span></p></div>`
@@ -1779,7 +1806,7 @@ const Paint = (() => {
     }
     g.restore();
   }
-  /* Repaint an existing canvas with strokes that pick up its own colours */
+  /* Repaint an existing canvas with strokes that pick up its own colors */
   function repaint(c, o = {}) {
     const g = c.getContext('2d'), w = c.width, h = c.height, r = rng(o.seed || 5);
     let data; try { data = g.getImageData(0, 0, w, h).data; } catch (e) { return; }
@@ -1792,7 +1819,7 @@ const Paint = (() => {
       bristle(g, r, x - Math.cos(ang) * len / 2, y - Math.sin(ang) * len / 2, ang, len, Wd[0] + r() * (Wd[1] - Wd[0]), col, o.alpha || 0.75);
     }
   }
-  /* Transparent overlay of light and dark strokes, used over flat CSS colours */
+  /* Transparent overlay of light and dark strokes, used over flat CSS colors */
   function overlay(w, h, o = {}) {
     const c = document.createElement('canvas'); c.width = w; c.height = h;
     const g = c.getContext('2d'), r = rng(o.seed || 9), n = o.n || Math.round(w * h / 90);
@@ -2030,7 +2057,7 @@ function updateToday() {
     }
     g.restore();
   }
-  /* Letters painted onto an offscreen canvas, then re-brushed in their own colours */
+  /* Letters painted onto an offscreen canvas, then re-brushed in their own colors */
   function paintedText(g, text, cx, baseline, font, fill, shadow, spacing, seed) {
     const pad = 30, m = g.measureText ? 0 : 0, tmp = document.createElement('canvas'), k = 2, tg = tmp.getContext('2d');
     tg.font = font; if ('wordSpacing' in tg) tg.wordSpacing = spacing || '0px';
@@ -3153,7 +3180,7 @@ window.Shop = (() => {
     });
   }
 
-  /* The five tall books and their neighbours */
+  /* The five tall books and their neighbors */
   const tomeMats = [];
   function fitText(g, text, maxW, size, font) { let s = size; do { g.font = `400 ${s}px ${font}`; s -= 1; } while (g.measureText(text).width > maxW && s > 12); return s; }
   (function placeRow() {
