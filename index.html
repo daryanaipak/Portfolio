@@ -49,7 +49,7 @@
 
   .top { position: fixed; z-index: 20; top: calc(env(safe-area-inset-top, 0px) + 22px); right: max(24px, env(safe-area-inset-right, 0px)); display: flex; flex-direction: column; align-items: flex-end; gap: 18px; }
   .nav { display: flex; gap: 8px; }
-  .nav button, .menu-btn, .btn { font: 800 0.72rem/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--btn-ink); background: color-mix(in srgb, var(--card) 70%, transparent); border: 1.5px solid var(--btn-ink); padding: 12px 14px; min-height: 44px; cursor: pointer; transition: background 0.25s, color 0.25s, transform 0.25s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
+  .nav button, .menu-btn, .btn { font: 800 0.72rem/1 var(--body); letter-spacing: 0.12em; text-transform: uppercase; color: var(--btn-ink); background: color-mix(in srgb, var(--card) 70%, transparent); border: 1.5px solid var(--btn-ink); padding: 12px 14px; min-height: 44px; cursor: pointer; transition: background 0.25s, color 0.25s; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); }
   .nav button:hover, .nav button[aria-current="true"] { background: var(--accent); color: #2b1e16; border-color: #2b1e16; }
   button:focus-visible, a:focus-visible { outline: 2px solid var(--title); outline-offset: 3px; }
   .menu-btn { display: none; }
@@ -214,7 +214,7 @@
     body { overflow: auto; }
     .wrap { grid-template-columns: 1fr; grid-template-rows: auto minmax(380px, 64svh); height: auto; min-height: 100%; }
     .intro { padding: 118px max(16px, env(safe-area-inset-right, 0px)) 4px max(16px, env(safe-area-inset-left, 0px)); }
-    .top { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); flex-direction: row; justify-content: space-between; align-items: flex-start; }
+    .top { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); flex-direction: row; justify-content: space-between; align-items: center; }
     .menu-btn { display: block; }
     .nav { display: none; position: absolute; top: 54px; left: 0; flex-direction: column; gap: 6px; padding: 10px; background: var(--card); border: 1.5px solid var(--ink); }
     .top.open .nav { display: flex; }
@@ -552,7 +552,7 @@
   /* ---------- entrance ---------- */
   gsap.from('.intro > *', { opacity: 0, y: 24, stagger: 0.09, duration: reduce ? 0 : 1.0, ease: 'power3.out', delay: 0.15 });
   gsap.from(canvas, { opacity: 0, scale: 0.96, duration: reduce ? 0 : 1.4, ease: 'power3.out', delay: 0.2 });
-  gsap.from('.top > *', { opacity: 0, y: -10, stagger: 0.08, duration: 0.6, delay: 0.5 });
+  gsap.from('.top > *', { opacity: 0, y: -10, stagger: 0.08, duration: 0.6, delay: 0.5, clearProps: 'transform,opacity' });
   resize();
   window.__room = { open, back, setMode, frame: f => { target = f; st.f = f; }, hover: s => setHover(s), openCase };
 })();
