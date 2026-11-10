@@ -275,7 +275,7 @@ const Reader = (() => {
     }
     $('pageCount').textContent = label;
     $('prevPage').disabled = !closed && idx === 0;
-    $('nextPage').disabled = closed;
+    $('nextPage').disabled = closed; $('nextPage').hidden = closed;  /* a closed book only goes back */
     const last = !closed && idx >= spreads() - 1;
     $('nextPage').innerHTML = last ? '<span class="lbl">Close the book </span>→' : '<span class="lbl">Next </span>→';
     $('nextPage').setAttribute('aria-label', last ? 'Close the book' : 'Next page');
