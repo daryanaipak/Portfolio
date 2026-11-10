@@ -419,3 +419,6 @@
 #reader .title-page.cs-intro .tp-result span { margin-bottom: 0.8cqw; }
 /* one heading size in every book: the size book V uses for "The brief", "The insight", "What I did" */
 #reader .page-body .ch, #reader .dense .ch, #reader .ba-col .ch { font-size: 3.3cqw !important; margin: 1cqw 0 1.4cqw; }
+/* case V: the note's arrow points up at the unsubscribe figure above it */
+#reader .fixnote .cs-note { padding-right: 9cqw; }
+#reader .fixnote .to-stat { position: absolute; right: 3cqw; top: -15cqw; width: 9cqw; height: 13.5cqw; fill: none; stroke: var(--pen); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }

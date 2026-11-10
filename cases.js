@@ -195,7 +195,7 @@ const CASES = [
        <p class="cap">From my flow decks. The feedback round added women's scholarships, student chat, campus visits for Belgian leads and post-graduation job routes for international leads.</p></div>`,
       `<div class="dense">${ch('The result')}<p>MBA portfolio fair follow-up flow, old version compared with today.</p>
        <div class="figs"><div><strong><s>1.19%</s>3.73%</strong><span>Click rate: 3.1× on the fair follow-up flow</span></div><div><strong><s>57%</s>60%</strong><span>Open rate: same flow, old version vs today</span></div><div><strong>10.9%</strong><span>First-email click rate, part-time MBA brochure email</span></div><div class="neg"><strong><s>0.60%</s>2.98%</strong><span>Unsubscribes: the trade-off, rose with send volume</span></div></div>
-       <div style="max-width:100%">${note('The fix: three emails a week from different teams was too many. We cut the frequency and hold these leads back from other mailings until they reach a set stage. Unsubscribes are already falling.', '', ARROW_UP)}</div>
+       <div class="fixnote" style="max-width:100%;position:relative">${note('The fix: three emails a week from different teams was too many. We cut the frequency and hold these leads back from other mailings until they reach a set stage. Unsubscribes are already falling.')}<svg class="to-stat" viewBox="0 0 40 60" aria-hidden="true"><path d="M30 56 C 36 38, 30 18, 8 5"/><path d="M17 4 L7 4.5 L11 13"/></svg></div>
        <div style="max-width:74%">${bars('Click rate, fair follow-up flow', [['Old version', '1.19%', 32, '#e3a414'], ['Today', '3.73%', 100, '#6b2fc8']])}</div></div>`
     ]
   }
