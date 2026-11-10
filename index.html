@@ -83,8 +83,8 @@
   .cu-bar { position: absolute; z-index: 44; top: calc(env(safe-area-inset-top, 0px) + 30px); align-items: flex-start; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; pointer-events: none; }
   .cu-bar > * { pointer-events: auto; }
   .cu-title { margin: 0; max-width: calc(100% - 220px); padding: 0.3em 0.2em 0.05em 0.25em; font: 400 clamp(2rem, 4.4vw, 3.4rem)/1.1 var(--display); color: #f6ead2; text-shadow: 0 3px 14px rgba(0, 0, 0, 0.55); }
-  /* the button's middle lines up with the middle of the section title beside it; on wider screens it scrolls away with the title, on phones it stays pinned */
-  @media (min-width: 861px) { .cu-close { position: absolute !important; } }
+  /* the button's middle lines up with the middle of the section title beside it; it scrolls away with the title on every screen */
+  .cu-close { position: absolute !important; }
   .cu-close { position: fixed; z-index: 45; top: var(--bt, calc(env(safe-area-inset-top, 0px) + 8px + clamp(2rem, 4.4vw, 3.4rem) * 0.9)); right: max(16px, env(safe-area-inset-right, 0px)); background: #f6ecd6; color: #2b1e16; border-color: #2b1e16; }
   .sheet { position: relative; z-index: 41; margin: 0 auto; width: min(1400px, 100%); }
   .shelf-back { position: fixed; z-index: 44; top: calc(var(--bt, 60px) + 60px); right: max(16px, env(safe-area-inset-right, 0px)); background: #2b1e16; color: #f6ecd6; border-color: #f6ecd6; }
