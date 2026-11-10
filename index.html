@@ -190,6 +190,8 @@
 
   /* newspaper: masthead, headline, the numbers, then the story */
   .newswrap { perspective: 1800px; }
+  /* the whole newspaper about 15% smaller on wider screens, every part in proportion */
+  @media (min-width: 861px) { .newswrap { zoom: 0.85; width: 85%; margin: 0 auto; } }
   .paper { background: #f4ecd9 var(--papertex); color: #241a14; padding: clamp(22px, 4vw, 56px); box-shadow: 0 40px 60px -30px rgba(0, 0, 0, 0.85); transform-origin: 50% 0; }
   .mast { font: 400 clamp(2.3rem, 5.6vw, 5rem)/1.1 var(--display); text-align: center; margin: 0; padding: 0.22em 0 0; white-space: nowrap; }
   .dateline { display: flex; justify-content: space-between; gap: 10px; flex-wrap: wrap; border-top: 3px double #241a14; border-bottom: 3px double #241a14; padding: 8px 2px; margin: 8px 0 22px; font: 800 0.7rem/1 var(--body); letter-spacing: 0.14em; text-transform: uppercase; }
