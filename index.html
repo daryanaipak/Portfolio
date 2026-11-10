@@ -4,13 +4,13 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Darya Naipak · Product Marketing Strategic Lead</title>
-<meta name="description" content="Darya Naipak, Product Marketing Strategic Lead. A strategy is only as good as what happens next: connecting what businesses want to achieve with what customers actually value. Step into the study: expertise, tools, case books, testimonials and contact.">
+<meta name="description" content="Darya Naipak, Product Marketing Strategic Lead. A strategy is only as good as what happens next: connecting business ambition with what customers actually value. Step into the study: expertise, tools, case books, testimonials and contact.">
 <meta name="color-scheme" content="light dark">
 <meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f7">
 <meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1c1e">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Darya Naipak · Product Marketing Strategic Lead">
-<meta property="og:description" content="A strategy is only as good as what happens next. Connecting what businesses want to achieve with what customers actually value.">
+<meta property="og:description" content="A strategy is only as good as what happens next. Connecting business ambition with what customers actually value.">
 <meta property="og:image" content="heroes/og.jpg">
 <link rel="icon" href="heroes/icon.png">
 <link rel="preload" href="fonts/MixTumble.otf" as="font" type="font/otf" crossorigin>
@@ -37,11 +37,12 @@
   :root[data-mode="night"] body::after { mix-blend-mode: soft-light; opacity: 0.35; }
 
   .wrap { position: relative; height: 100%; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr); }
-  .intro { align-self: center; padding: 96px 16px 32px max(clamp(24px, 5vw, 88px), env(safe-area-inset-left, 0px)); position: relative; z-index: 3; }
+  .intro { align-self: center; padding: 96px 16px 32px max(clamp(24px, 5vw, 88px), env(safe-area-inset-left, 0px)); position: relative; top: -40px; z-index: 3; }
   .name { font: 400 clamp(3rem, min(6.4vw, 11.2vh), 7.4rem)/1.15 var(--display); margin: 0; padding: 0.22em 0.08em 0.34em 0.06em; white-space: nowrap; }
   .role { font: 400 clamp(1.25rem, min(2.1vw, 3.6vh), 2.3rem)/1.15 var(--display); margin: 0 0 0.35rem; padding: 0.2em 0.06em 0.05em; color: var(--title); white-space: nowrap; }
-  .slogan { font-size: clamp(1rem, 1.2vw, 1.18rem); line-height: 1.55; max-width: 26rem; margin: 0; color: var(--ink-soft); }
-  .slogan b { display: block; margin-bottom: 0.35rem; font-weight: 800; font-size: 1.08em; line-height: 1.35; color: var(--ink); }
+  /* the headline is the positioning statement, the line beneath explains it */
+  .slogan { font-size: clamp(0.95rem, 1.05vw, 1.05rem); line-height: 1.6; max-width: 440px; margin: 0; color: var(--ink-soft); }
+  .slogan b { display: block; margin-bottom: 0.9rem; font-weight: 800; font-size: clamp(1.3rem, 1.55vw, 1.55rem); line-height: 1.25; letter-spacing: -0.005em; color: var(--ink); }
   .load { display: none; margin-top: 1rem; height: 2px; width: 160px; background: color-mix(in srgb, var(--ink) 15%, transparent); overflow: hidden; }
   .load i { display: block; height: 100%; width: 0; background: var(--title); transition: width 0.3s; }
 
@@ -248,7 +249,7 @@
   @media (max-width: 860px) {
     body { overflow: auto; }
     .wrap { grid-template-columns: 1fr; grid-template-rows: auto minmax(380px, 64svh); height: auto; min-height: 100%; }
-    .intro { padding: 118px max(16px, env(safe-area-inset-right, 0px)) 4px max(16px, env(safe-area-inset-left, 0px)); }
+    .intro { top: 0; padding: 118px max(16px, env(safe-area-inset-right, 0px)) 4px max(16px, env(safe-area-inset-left, 0px)); }
     .top { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); flex-direction: row; justify-content: space-between; align-items: center; }
     .menu-btn { display: block; }
     .nav { display: none; position: absolute; top: 54px; left: 0; flex-direction: column; gap: 6px; padding: 10px; background: var(--card); border: 1.5px solid var(--ink); }
@@ -290,7 +291,7 @@
   <section class="intro">
     <h1 class="name">darya naipak</h1>
     <p class="role">product marketing strategic lead</p>
-    <p class="slogan"><b>A strategy is only as good as what happens next.</b>Connecting what businesses want to achieve with what customers actually value.</p>
+    <p class="slogan"><b>A strategy is only as good as what happens next.</b>Connecting business ambition with what customers actually value.</p>
     <div class="load" aria-hidden="true"><i id="loadbar"></i></div>
   </section>
   <div class="stagebox"><div class="spots" id="spots" aria-hidden="true"></div><div class="ghost" id="ghost" aria-hidden="true"><i class="rip"></i><svg viewBox="0 0 24 24"><path d="M10 7.5c0-.83.67-1.5 1.5-1.5S13 6.67 13 7.5v6h1.26c.19 0 .37.04.54.11l4.54 2.26c.53.22.91.76.91 1.38 0 .06-.01.13-.02.2l-.75 5.27c-.11.73-.69 1.28-1.44 1.28h-6.79c-.41 0-.79-.17-1.06-.44L5.25 18.62l.79-.8c.2-.2.48-.33.79-.33.09 0 .16.02.24.03l3.43.72V7.5z"/></svg></div><canvas id="room" role="img" aria-label="A rendered antique study: two tall bookshelves around a pinboard over a chest of drawers, an oxblood sofa and leather armchair on a round Persian rug, plants, three visitors and the shop cat. Each piece opens a part of the portfolio; the menu above does the same."></canvas></div>
