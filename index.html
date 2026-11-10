@@ -393,15 +393,20 @@
     const px = e.deltaMode === 1 ? e.deltaX * 16 : e.deltaX; target = Math.max(0, Math.min(N - 1, target - px / box.w * N * 1.1)); fTo(target); }, { passive: false });
   let lastTouch = -1e9;
   const end = e => { canvas.classList.remove('drag'); stopTour(); if (e.pointerType !== 'mouse') lastTouch = performance.now();
-    if (drag && !drag.moved) { const s = pick(e) || nearSpot(e); if (s) { if (e.pointerType !== 'mouse') { setHover(s); setTimeout(() => open(s), reduce ? 0 : 420); } else open(s); } } drag = null; };
+    /* touch screens: the first tap shows the piece's note, a second tap on the same piece opens it; tapping elsewhere closes the note or shows that piece's note */
+    if (drag && !drag.moved) { const s = pick(e) || nearSpot(e);
+      if (e.pointerType === 'mouse') { if (s) open(s); }
+      else if (s && hover === s) open(s);
+      else setHover(s || null); } drag = null; };
   canvas.addEventListener('pointerup', end); canvas.addEventListener('pointercancel', () => { drag = null; canvas.classList.remove('drag'); });
-  canvas.addEventListener('pointerleave', () => { if (!drag) setHover(null); });
+  canvas.addEventListener('pointerleave', e => { if (!drag && e.pointerType === 'mouse') setHover(null); });
   function pick(e) { const r = canvas.getBoundingClientRect(), x = (e.clientX - r.left - box.x) / box.w, y = (e.clientY - r.top - box.y) / box.h; if (x < 0 || y < 0 || x > 1 || y > 1) return null;
     const d = maskData[Math.round(st.f)]; if (!d) return null; const px = Math.floor(x * d.width), py = Math.floor(y * d.height), i = (py * d.width + px) * 4;
     if (d.data[i + 3] === 0) return null; const id = Math.round(d.data[i] / 40) - 1; return SECTIONS[id] || null; }
 
   /* ---------- hover note ---------- */
   const hnote = $('#hnote');
+
   function setHover(s) { if (s === hover) return; hover = s; canvas.classList.toggle('over', !!s);
     if (s) { lastHover = s; const [t, sub] = NOTES[s]; hnote.innerHTML = `${t}<small>${sub}</small>`; hnote.hidden = false; placeNote();
       gsap.fromTo(hnote, { opacity: 0, y: 10, rotate: -7, scale: 0.92 }, { opacity: 1, y: 0, rotate: -3, scale: 1, duration: reduce ? 0 : 0.45, ease: 'back.out(2)' });
