@@ -83,9 +83,9 @@
   .cu-bar > * { pointer-events: auto; }
   .cu-title { margin: 0; max-width: calc(100% - 220px); padding: 0.3em 0.2em 0.05em 0.25em; font: 400 clamp(2rem, 4.4vw, 3.4rem)/1.1 var(--display); color: #f6ead2; text-shadow: 0 3px 14px rgba(0, 0, 0, 0.55); }
   /* the button's middle lines up with the middle of the section title beside it */
-  .cu-close { position: fixed; z-index: 45; top: calc(env(safe-area-inset-top, 0px) + 8px + clamp(2rem, 4.4vw, 3.4rem) * 0.9); right: max(16px, env(safe-area-inset-right, 0px)); background: #f6ecd6; color: #2b1e16; border-color: #2b1e16; }
+  .cu-close { position: fixed; z-index: 45; top: var(--bt, calc(env(safe-area-inset-top, 0px) + 8px + clamp(2rem, 4.4vw, 3.4rem) * 0.9)); right: max(16px, env(safe-area-inset-right, 0px)); background: #f6ecd6; color: #2b1e16; border-color: #2b1e16; }
   .sheet { position: relative; z-index: 41; margin: 0 auto; width: min(1400px, 100%); }
-  .shelf-back { position: fixed; z-index: 44; top: calc(env(safe-area-inset-top, 0px) + 70px + clamp(2rem, 4.4vw, 3.4rem) * 0.9); right: max(16px, env(safe-area-inset-right, 0px)); background: #2b1e16; color: #f6ecd6; border-color: #f6ecd6; }
+  .shelf-back { position: fixed; z-index: 44; top: calc(var(--bt, 60px) + 60px); right: max(16px, env(safe-area-inset-right, 0px)); background: #2b1e16; color: #f6ecd6; border-color: #f6ecd6; }
   .hero { display: block; width: 100%; height: auto; filter: drop-shadow(0 40px 40px rgba(0, 0, 0, 0.55)); will-change: transform; }
 
   /* pinboard: sized to fit the screen with a margin all round; a "reach out" strip across the top, then a 3 x 3 grid:
@@ -154,7 +154,7 @@
   .btn.dark { background: #2b1e16; color: #f6ecd6; border-color: #2b1e16; } .btn.lite { background: transparent; color: #2b1e16; border-color: #2b1e16; }
   /* the reader from the first site, sitting in the close-up under its title bar */
   #reader { z-index: 43; background: transparent; padding-top: calc(env(safe-area-inset-top, 0px) + 172px); grid-template-rows: minmax(0, 1fr) auto; }
-  #reader .reader-top { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 70px + clamp(2rem, 4.4vw, 3.4rem) * 0.9); right: max(16px, env(safe-area-inset-right, 0px)); padding: 0; width: auto; z-index: 45; }
+  #reader .reader-top { position: fixed; top: calc(var(--bt, 60px) + 60px); right: max(16px, env(safe-area-inset-right, 0px)); padding: 0; width: auto; z-index: 45; }
   #reader .reader-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .reading #sheet { visibility: hidden; }
   #reader #closeBook { background: #2b1e16; color: #f6ecd6; border: 1.5px solid #f6ecd6; }
@@ -538,8 +538,15 @@
   function openCase(i, from) { if (window.Cases) Cases.open(i, from); }
   let lastFocus = null, opened = null, openedAt = 0;
   function clearGlow() { setHover(null); gsap.killTweensOf(st, 'glow'); st.glow = 0; lastHover = null; hnote.hidden = true; }
+  /* "Back to the room" is centred on the title's letters as they appear (from the baseline up to the top of the tall letters), not on the line box, so it lines up whatever the title and screen size */
+  const meas = document.createElement('canvas').getContext('2d');
+  function alignBack() { if (cu.hidden) return; const t = cuTitle, cs = getComputedStyle(t), bar = $('.cu-bar'); meas.font = cs.font;
+    const m = meas.measureText(t.textContent), rg = document.createRange(); rg.selectNodeContents(t); const line = rg.getClientRects()[0]; if (!line) return;
+    const top = bar.offsetTop - cu.scrollTop + t.offsetTop + (line.top - t.getBoundingClientRect().top), base = top + m.fontBoundingBoxAscent * (line.height / (m.fontBoundingBoxAscent + m.fontBoundingBoxDescent));
+    const mid = base - m.actualBoundingBoxAscent / 2; root.style.setProperty('--bt', Math.round(mid - cuClose.offsetHeight / 2) + 'px'); }
+  addEventListener('resize', alignBack);
   function open(s) { openedAt = performance.now(); lastFocus = document.activeElement; menuSet(false); clearGlow(); opened = s; const from = secRect(s);
-    cuTitle.textContent = TITLES[s]; sheet.innerHTML = VIEWS[s](); cu.hidden = false; cu.scrollTop = 0; document.body.style.overflow = 'hidden';
+    cuTitle.textContent = TITLES[s]; (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(alignBack)); sheet.innerHTML = VIEWS[s](); cu.hidden = false; cu.scrollTop = 0; document.body.style.overflow = 'hidden';
     wire(s); gsap.to('.intro', { opacity: 0, x: -30, duration: 0.5 * D }); requestAnimationFrame(() => enter(s, from)); cuClose.focus({ preventScroll: true });
     document.querySelectorAll('[data-go]').forEach(b => b.setAttribute('aria-current', String(b.dataset.go === s))); }
   function back() { if (!reader.hidden) $('#closeBook').click(); if (cu.hidden) return; clearGlow(); const s = opened, to = secRect(s), t = sheet.firstElementChild;
