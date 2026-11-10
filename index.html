@@ -5,7 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Darya Naipak · Product Marketing Strategic Lead</title>
 <meta name="description" content="Darya Naipak, Product Marketing Strategic Lead. I turn complex briefs into campaigns people actually click, read and remember. Step into the study: expertise, tools, case books, testimonials and contact.">
-<meta name="theme-color" content="#2b1e16">
+<meta name="color-scheme" content="light dark">
+<meta name="theme-color" media="(prefers-color-scheme: light)" content="#f2f2f7">
+<meta name="theme-color" media="(prefers-color-scheme: dark)" content="#1c1c1e">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Darya Naipak · Product Marketing Strategic Lead">
 <meta property="og:description" content="I turn complex briefs into campaigns people actually click, read and remember.">
@@ -27,9 +29,8 @@
     --bg: #efe6d4; --bg-deep: #d9c7a5; --ink: #2b1e16; --ink-soft: #5a4636; --title: #7e2a22; --accent: #d6a845;
     --card: #f6eedd; --btn-ink: #2b1e16; --pen: #2c4677; --red-pencil: #9c3a2d;
     --display: "Mix Tumble", "Garet", "Marker Felt", cursive; --body: "Garet", "Avenir Next", "Segoe UI", system-ui, sans-serif; --hand: "Dudu Calligraphy", "Segoe Print", cursive;
-    color-scheme: light;
   }
-  :root[data-mode="night"] { --bg: #241917; --bg-deep: #0f0a09; --ink: #efe3cc; --ink-soft: #c9b394; --title: #e0a25a; --card: #2e2220; --btn-ink: #efe3cc; color-scheme: dark; }
+  :root[data-mode="night"] { --bg: #241917; --bg-deep: #0f0a09; --ink: #efe3cc; --ink-soft: #c9b394; --title: #e0a25a; --card: #2e2220; --btn-ink: #efe3cc; }
   html, body { height: 100%; }
   body { margin: 0; background: radial-gradient(110% 90% at 70% 52%, var(--bg) 0%, var(--bg) 40%, var(--bg-deep) 100%); color: var(--ink); font-family: var(--body); overflow: hidden; transition: background 1.2s ease, color 1.2s ease; }
   body::after { content: ""; position: fixed; inset: 0; pointer-events: none; z-index: 60; opacity: 0.22; mix-blend-mode: multiply; background-image: var(--grain); }
