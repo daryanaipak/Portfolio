@@ -234,6 +234,7 @@
     .tools { grid-template-columns: 1fr 1fr; }
     .trio { grid-template-columns: 1fr; }
     .vis img { width: 150px; }
+    .vis + .saybox { margin: 4px 0 26px; } .vis + .saybox::before { left: 50% !important; }
     .shelfrow { flex-wrap: wrap; align-items: flex-start; }
     .shelf-back { top: calc(env(safe-area-inset-top, 0px) + 84px); }
   }
@@ -512,10 +513,13 @@
         btns.forEach(x => { x.setAttribute('aria-expanded', 'false'); x.textContent = 'Open the testimonial'; });
         if (cur === i) { cur = -1; gsap.to(box, { opacity: 0, y: -10, duration: 0.3 * D, onComplete: () => { if (cur < 0) box.hidden = true; } }); return; }
         const was = cur; cur = i; b.setAttribute('aria-expanded', 'true'); b.textContent = 'Close the testimonial';
-        const fr = b.closest('.vis').getBoundingClientRect(), br = box.parentElement.getBoundingClientRect(), bw = Math.min(1360, br.width);
-        box.style.setProperty('--tip', Math.max(40, Math.min(bw - 40, fr.left + fr.width / 2 - (br.left + (br.width - bw) / 2))) + 'px');
         const fill = () => { q.textContent = `“${v.quote}”`; who.textContent = `${v.name}, ${v.role}`; };
-        if (was < 0) { fill(); box.hidden = false; gsap.fromTo(box, { opacity: 0, y: -14, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.5 * D, ease: 'back.out(1.6)' }); }
+        /* phones: the figures stack, so the bubble opens right under the person who is speaking; wider screens: one bubble under all three */
+        const vis = b.closest('.vis'), narrow = innerWidth < 861, home = narrow ? vis : sheet.querySelector('.trio');
+        if (box.previousElementSibling !== home) { home.after(box); if (was >= 0) { fill(); box.hidden = false; gsap.fromTo(box, { opacity: 0, y: -14, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.5 * D, ease: 'back.out(1.6)' }); box.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); return; } }
+        const fr = vis.getBoundingClientRect(), br = box.parentElement.getBoundingClientRect(), bw = Math.min(1360, br.width);
+        box.style.setProperty('--tip', Math.max(40, Math.min(bw - 40, fr.left + fr.width / 2 - (br.left + (br.width - bw) / 2))) + 'px');
+        if (was < 0) { fill(); box.hidden = false; gsap.fromTo(box, { opacity: 0, y: -14, scale: 0.97 }, { opacity: 1, y: 0, scale: 1, duration: 0.5 * D, ease: 'back.out(1.6)' }); if (narrow) box.scrollIntoView({ block: 'nearest', behavior: reduce ? 'auto' : 'smooth' }); }
         else gsap.to([q, who], { opacity: 0, duration: 0.18 * D, onComplete: () => { fill(); gsap.to([q, who], { opacity: 1, duration: 0.3 * D }); } });
         })); }
     if (s === 'cat') $('#copyMail').addEventListener('click', () => { const t = $('#toast'); (navigator.clipboard ? navigator.clipboard.writeText('naipak.darya.be@gmail.com') : Promise.reject()).then(() => t.textContent = 'Copied. Talk soon!', () => t.textContent = 'naipak.darya.be@gmail.com'); });
