@@ -417,3 +417,5 @@
 /* the headline result on each book's first page: the line beneath the big number sits tight and bold */
 #reader .title-page.cs-intro .tp-result { font-family: var(--body); font-weight: 800; line-height: 1.18; letter-spacing: 0; margin-top: 1cqw !important; }
 #reader .title-page.cs-intro .tp-result span { margin-bottom: 0.8cqw; }
+/* one heading size in every book: the size book V uses for "The brief", "The insight", "What I did" */
+#reader .page-body .ch, #reader .dense .ch, #reader .ba-col .ch { font-size: 3.3cqw !important; margin: 1cqw 0 1.4cqw; }
