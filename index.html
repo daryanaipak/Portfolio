@@ -82,9 +82,10 @@
   .cu-bar { position: absolute; z-index: 44; top: calc(env(safe-area-inset-top, 0px) + 30px); align-items: flex-start; left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); display: flex; justify-content: space-between; align-items: center; gap: 12px; pointer-events: none; }
   .cu-bar > * { pointer-events: auto; }
   .cu-title { margin: 0; padding: 0.3em 0.2em 0.05em 0.25em; font: 400 clamp(2rem, 4.4vw, 3.4rem)/1.2 var(--display); color: #f6ead2; text-shadow: 0 3px 14px rgba(0, 0, 0, 0.55); }
-  .cu-close { position: fixed; z-index: 45; top: calc(env(safe-area-inset-top, 0px) + 30px); right: max(16px, env(safe-area-inset-right, 0px)); background: #f6ecd6; color: #2b1e16; border-color: #2b1e16; }
+  /* the button's middle lines up with the middle of the section title beside it */
+  .cu-close { position: fixed; z-index: 45; top: calc(env(safe-area-inset-top, 0px) + 8px + clamp(2rem, 4.4vw, 3.4rem) * 0.9); right: max(16px, env(safe-area-inset-right, 0px)); background: #f6ecd6; color: #2b1e16; border-color: #2b1e16; }
   .sheet { position: relative; z-index: 41; margin: 0 auto; width: min(1400px, 100%); }
-  .shelf-back { position: fixed; z-index: 44; top: calc(env(safe-area-inset-top, 0px) + 112px); right: max(16px, env(safe-area-inset-right, 0px)); background: #2b1e16; color: #f6ecd6; border-color: #f6ecd6; }
+  .shelf-back { position: fixed; z-index: 44; top: calc(env(safe-area-inset-top, 0px) + 70px + clamp(2rem, 4.4vw, 3.4rem) * 0.9); right: max(16px, env(safe-area-inset-right, 0px)); background: #2b1e16; color: #f6ecd6; border-color: #f6ecd6; }
   .hero { display: block; width: 100%; height: auto; filter: drop-shadow(0 40px 40px rgba(0, 0, 0, 0.55)); will-change: transform; }
 
   /* pinboard: sized to fit the screen with a margin all round; a "reach out" strip across the top, then a 3 x 3 grid:
@@ -153,7 +154,7 @@
   .btn.dark { background: #2b1e16; color: #f6ecd6; border-color: #2b1e16; } .btn.lite { background: transparent; color: #2b1e16; border-color: #2b1e16; }
   /* the reader from the first site, sitting in the close-up under its title bar */
   #reader { z-index: 43; background: transparent; padding-top: calc(env(safe-area-inset-top, 0px) + 172px); grid-template-rows: minmax(0, 1fr) auto; }
-  #reader .reader-top { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 112px); right: max(16px, env(safe-area-inset-right, 0px)); padding: 0; width: auto; z-index: 45; }
+  #reader .reader-top { position: fixed; top: calc(env(safe-area-inset-top, 0px) + 70px + clamp(2rem, 4.4vw, 3.4rem) * 0.9); right: max(16px, env(safe-area-inset-right, 0px)); padding: 0; width: auto; z-index: 45; }
   #reader .reader-title { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); }
   .reading #sheet { visibility: hidden; }
   #reader #closeBook { background: #2b1e16; color: #f6ecd6; border: 1.5px solid #f6ecd6; }
@@ -236,7 +237,6 @@
     .vis img { width: 150px; }
     .vis + .saybox { margin: 4px 0 26px; } .vis + .saybox::before { left: 50% !important; }
     .shelfrow { flex-wrap: wrap; align-items: flex-start; }
-    .shelf-back { top: calc(env(safe-area-inset-top, 0px) + 84px); }
   }
   @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
 </style>
@@ -272,7 +272,7 @@
 <div class="hnote" id="hnote" hidden></div>
 <div class="closeup" id="closeup" hidden role="dialog" aria-modal="true" aria-labelledby="cuTitle">
   <div class="scrim" id="scrim"></div>
-  <div class="cu-bar"><h2 class="cu-title" id="cuTitle"></h2><button class="btn cu-close" id="cuClose" type="button">Back to the room</button></div>
+  <div class="cu-bar"><h2 class="cu-title" id="cuTitle"></h2></div><button class="btn cu-close" id="cuClose" type="button">Back to the room</button>
   <div class="sheet" id="sheet"></div>
   <div class="reader" id="reader" role="dialog" aria-modal="true" aria-labelledby="readerTitle" hidden>
     <div class="reader-top"><p class="reader-title" id="readerTitle">Case</p><button class="btn" id="closeBook" type="button">Back to the shelf</button></div>
@@ -488,7 +488,7 @@
   const D = reduce ? 0 : 1;
   function enter(s, from) {
     const hero = sheet.querySelector('.hero'), tl = gsap.timeline();
-    tl.fromTo('#scrim', { opacity: 0 }, { opacity: 1, duration: 0.5 * D }, 0).fromTo('.cu-bar', { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.5 * D }, 0.15 * D);
+    tl.fromTo('#scrim', { opacity: 0 }, { opacity: 1, duration: 0.5 * D }, 0).fromTo(['.cu-bar', '#cuClose'], { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.5 * D }, 0.15 * D);
     /* the piece flies from where it stands in the room to the front */
     const target = s === 'shelves' ? sheet.querySelector('.shelfrow') : s === 'couch' ? $('#paper') : hero;
     if (target) { const r = target.getBoundingClientRect(); const sc = Math.max(0.08, Math.min(from.w / r.width, from.h / r.height));
@@ -537,7 +537,7 @@
     const r = t.getBoundingClientRect();
     gsap.timeline({ onComplete: () => { cu.hidden = true; sheet.innerHTML = ''; gsap.set([t], { clearProps: 'all' }); document.body.style.overflow = ''; } })
       .to(t, { x: to.x + to.w / 2 - (r.left + r.width / 2), y: to.y + to.h / 2 - (r.top + r.height / 2), scale: Math.max(0.06, Math.min(to.w / r.width, to.h / r.height)), opacity: 0, duration: 0.6 * D, ease: 'power3.in' }, 0)
-      .to('#scrim', { opacity: 0, duration: 0.5 * D }, 0.15 * D).to('.cu-bar', { opacity: 0, duration: 0.3 * D }, 0);
+      .to('#scrim', { opacity: 0, duration: 0.5 * D }, 0.15 * D).to(['.cu-bar', '#cuClose'], { opacity: 0, duration: 0.3 * D }, 0);
     gsap.to('.intro', { opacity: 1, x: 0, duration: 0.6 * D, delay: 0.3 * D });
     document.querySelectorAll('[data-go]').forEach(b => b.removeAttribute('aria-current')); if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); }
   cuClose.addEventListener('click', back); $('#scrim').addEventListener('click', back);
