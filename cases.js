@@ -400,6 +400,13 @@ const Reader = (() => {
     /* back into the shop, just past the bookshelf, where the next part of the walk begins */
     if (b.dataset.act === 'store') close(() => window.__room && window.__room.back());
   });
+  /* the arrow keys turn the pages wherever the focus is, as long as the book is open and nothing sits on top of it */
+  document.addEventListener('keydown', e => {
+    if (el.hidden || el.contains(e.target) || e.altKey || e.ctrlKey || e.metaKey || e.shiftKey) return;
+    if (!document.getElementById('viewer').hidden || !document.getElementById('player').hidden) return;
+    if (/^(INPUT|TEXTAREA|SELECT)$/.test(e.target.tagName) || e.target.isContentEditable) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); turn(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); turn(-1); }
+  });
   el.addEventListener('keydown', e => {
     if (e.key === 'Escape') close();
     else if (e.key === 'ArrowRight') turn(1);
@@ -464,6 +471,10 @@ const Viewer = (() => {
   $('vPrev').addEventListener('click', () => go(-1));
   $('vNext').addEventListener('click', () => go(1));
   $('viewerClose').addEventListener('click', close);
+  document.addEventListener('keydown', e => {
+    if (el.hidden || el.contains(e.target) || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === 'ArrowRight') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
+  });
   el.addEventListener('keydown', e => {
     e.stopPropagation();
     if (e.key === 'Escape') close();
