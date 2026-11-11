@@ -274,7 +274,7 @@ const Reader = (() => {
       label = !ns.length ? 'Title page' : ns.length === 2 ? `Pages ${ns[0]}–${ns[1]} of ${total}` : `Page ${ns[0]} of ${total}`;
     }
     $('pageCount').textContent = label;
-    $('prevPage').disabled = !closed && idx === 0;
+    $('prevPage').disabled = $('prevPage').hidden = !closed && idx === 0;  /* nothing before the first page */
     $('nextPage').disabled = closed; $('nextPage').hidden = closed;  /* a closed book only goes back */
     const last = !closed && idx >= spreads() - 1;
     $('nextPage').innerHTML = last ? '<span class="lbl">Close the book </span>→' : '<span class="lbl">Next </span>→';
