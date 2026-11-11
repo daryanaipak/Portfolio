@@ -447,6 +447,7 @@ const Player = (() => {
   function close() { stage.querySelector('video')?.pause(); stage.innerHTML = ''; el.hidden = true; opener && opener.focus({ preventScroll: true }); }
   $('playerClose').addEventListener('click', close);
   el.addEventListener('keydown', e => { e.stopPropagation(); if (e.key === 'Escape') close(); });
+  document.addEventListener('keydown', e => { if (!el.hidden && e.key === 'Escape' && !el.contains(e.target)) close(); });
   return { open };
 })();
 
@@ -471,18 +472,24 @@ const Viewer = (() => {
   $('vPrev').addEventListener('click', () => go(-1));
   $('vNext').addEventListener('click', () => go(1));
   $('viewerClose').addEventListener('click', close);
-  document.addEventListener('keydown', e => {
-    if (el.hidden || el.contains(e.target) || e.altKey || e.ctrlKey || e.metaKey) return;
-    if (e.key === 'ArrowRight') { e.preventDefault(); go(1); } else if (e.key === 'ArrowLeft') { e.preventDefault(); go(-1); }
-  });
-  el.addEventListener('keydown', e => {
-    e.stopPropagation();
-    if (e.key === 'Escape') close();
-    if (e.key === 'ArrowRight') go(1);
-    if (e.key === 'ArrowLeft') go(-1);
-  });
+  /* keys: right or down for the next page, left or up for the previous one, wherever the focus is */
+  const KEYS = { ArrowRight: 1, ArrowDown: 1, PageDown: 1, ArrowLeft: -1, ArrowUp: -1, PageUp: -1 };
+  function onKey(e) {
+    if (el.hidden || e.altKey || e.ctrlKey || e.metaKey) return;
+    if (e.key === 'Escape') { close(); return; }
+    if (KEYS[e.key]) { e.preventDefault(); go(KEYS[e.key]); }
+  }
+  document.addEventListener('keydown', e => { if (!el.contains(e.target)) onKey(e); });
+  el.addEventListener('keydown', e => { e.stopPropagation(); onKey(e); });
+  /* scrolling with a mouse wheel or a two-finger swipe also leafs through the pages, one page per gesture */
+  let wheelLock = 0;
+  strip.addEventListener('wheel', e => {
+    if (Math.abs(e.deltaY) <= Math.abs(e.deltaX)) return; /* sideways swipes scroll the strip natively */
+    e.preventDefault(); const now = performance.now(); if (now < wheelLock || Math.abs(e.deltaY) < 4) return;
+    wheelLock = now + 650; go(e.deltaY > 0 ? 1 : -1);
+  }, { passive: false });
   return { open };
 })();
 
-window.Cases = { open: (i, from) => Reader.open(i, from), CASES };
+window.Cases = { open: (i, from) => Reader.open(i, from), CASES, viewer: (id, from, i) => Viewer.open(id, from, i), player: (id, from) => Player.open(id, from), brochures: () => Object.keys(BROCHURES), pages: id => BROCHURES[id].pages.length };
 })();

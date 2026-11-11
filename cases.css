@@ -425,3 +425,26 @@
 /* case V: the note's arrow points up at the unsubscribe figure above it */
 #reader .fixnote .cs-note { padding-right: 9cqw; }
 #reader .fixnote .to-stat { position: absolute; right: 3cqw; top: -15cqw; width: 9cqw; height: 13.5cqw; fill: none; stroke: var(--pen); stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
+
+/* ---------- Full-screen brochure viewer and video player ----------
+   (the rules above were written for element ids the page no longer uses, so these size them properly)
+   Every brochure page is shown whole, fitted inside the screen between the title bar and the page buttons. */
+#viewer { height: 100vh; height: 100dvh; box-sizing: border-box; overflow-y: auto; overscroll-behavior: contain; }
+#viewer .viewer-strip { width: 100%; max-width: 1600px; height: 100%; min-height: 0; display: flex; overflow-x: auto; overflow-y: hidden; scroll-snap-type: x mandatory; scrollbar-width: none; outline: none; }
+#viewer .viewer-strip::-webkit-scrollbar { display: none; }
+#viewer .viewer-strip figure { flex: 0 0 100%; height: 100%; min-height: 0; margin: 0; scroll-snap-align: center; display: flex; align-items: center; justify-content: center; }
+#viewer .viewer-strip img { display: block; width: auto; height: auto; max-width: 100%; max-height: 100%; object-fit: contain; box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6); }
+/* videos: at least half the screen, as large as the screen allows while the title and close button stay in view */
+#player { height: 100vh; height: 100dvh; box-sizing: border-box; overflow-y: auto; align-content: start; }
+#player .player-stage { width: 100%; min-height: 0; display: grid; place-items: center; align-content: center; }
+#player .player-frame, #player .player-stage video { width: min(94vw, 1600px, (100dvh - 190px) * 16 / 9); max-width: 100%; aspect-ratio: 16 / 9; height: auto; background: #000; }
+#player .player-frame { position: relative; }
+#player .player-frame iframe { position: absolute; inset: 0; width: 100%; height: 100%; border: 0; }
+#player .player-alt { margin: 0.6rem 0 0; font-size: 0.85rem; text-align: center; }
+#player .player-alt a, #player .player-go { color: #f2d98a; }
+#player .player-go { display: inline-block; font-size: 1.2rem; font-weight: 800; padding: 0.7rem 1.2rem; border: 1px solid #f2d98a; text-decoration: none; }
+#player .player-wait { display: grid; gap: 1rem; justify-items: center; text-align: center; max-width: min(94vw, 1100px); }
+#player .player-wait img { max-width: 100%; max-height: calc(100dvh - 240px); object-fit: contain; }
+#player .player-wait a { color: #f2d98a; }
+@media (max-width: 860px) and (orientation: portrait) { #player .player-frame, #player .player-stage video { width: 100%; } }
+@media (max-height: 500px) { #player .player-frame, #player .player-stage video { width: min(94vw, (100dvh - 165px) * 16 / 9); } #player { gap: 6px; } #player .reader-top { padding-bottom: 0; } }
