@@ -455,7 +455,7 @@
     if (drag && Math.abs(e.clientX - drag.x) > 6 && !drag.moved && Math.abs(e.clientX - drag.x) > Math.abs(e.clientY - drag.y)) { drag.moved = true; canvas.setPointerCapture(drag.id); canvas.classList.add('drag'); setHover(null); }
     if (drag && drag.moved) { target = Math.max(0, Math.min(N - 1, drag.f + (e.clientX - drag.x) / box.w * N * 1.3)); fTo(target); return; }
     /* a tap on a touch screen can be followed by an emulated mouse move: ignore those, so nothing stays lit */
-    if (e.pointerType === 'mouse' && !touch && performance.now() - lastTouch > 1000 && !tour) setHover(pick(e)); });
+    if (e.pointerType === 'mouse' && !touch && performance.now() - lastTouch > 1000 && !tour) setHover(pick(e) || nearSpot(e)); });
   /* trackpads: a two-finger swipe to the side turns the room, the same way as dragging it */
   addEventListener('wheel', e => { if (!cu.hidden || Math.abs(e.deltaX) <= Math.abs(e.deltaY)) return; e.preventDefault(); setHover(null);
     const px = e.deltaMode === 1 ? e.deltaX * 16 : e.deltaX; target = Math.max(0, Math.min(N - 1, target - px / box.w * N * 1.1)); fTo(target); }, { passive: false });
