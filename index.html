@@ -422,8 +422,8 @@
   let box = { x: 0, y: 0, w: 1, h: 1 }, dpr = 1;
   /* zoom: on wide screens the room first stands at 76% so more of the name shows; the lens grows it to full size, its floor staying put */
   const ZOOM_OUT = 0.76, zoom = { k: ZOOM_OUT };
-  function resize() { const r = canvas.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); layoutBox(); }
-  function layoutBox() { const R = canvas.getBoundingClientRect(), P = innerWidth < 861 ? 0 : parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pad')) || 0, r = { width: R.width - 2 * P, height: R.height - 2 * P };
+  function resize() { const r = { width: canvas.clientWidth, height: canvas.clientHeight }; /* layout size, not the on-screen one: the entrance animation scales the canvas */ dpr = Math.min(2, devicePixelRatio || 1); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); layoutBox(); }
+  function layoutBox() { const R = { width: canvas.clientWidth, height: canvas.clientHeight }, P = innerWidth < 861 ? 0 : parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--pad')) || 0, r = { width: R.width - 2 * P, height: R.height - 2 * P };
     /* size the room by the room itself, not by its picture: the frames keep a transparent margin of about 7% at the sides and the room fills about 3%-92.5% of their height */
     const narrow = innerWidth < 861, CW = 0.86, CH = 0.895, s = Math.min(r.width * (narrow ? 0.98 : 0.99) / (IW * CW), (r.height - (narrow ? 16 : 24)) / (IH * CH));
     box.w = IW * s; box.h = IH * s; box.x = (r.width - box.w) / 2 + (narrow ? 0 : -r.width * 0.02); box.y = (r.height - box.h * CH) / 2 - box.h * 0.03 + (narrow ? 4 : -6);
@@ -431,6 +431,8 @@
     box.x += P; box.y += P;
     draw(); }
   addEventListener('resize', resize);
+  /* the stage can settle after load (fonts, layout) without a window resize: follow the canvas itself so the room never jumps */
+  if (window.ResizeObserver) new ResizeObserver(() => { if (IW) resize(); }).observe(canvas);
   const ok = i => i && i.complete && i.naturalWidth;
   function drawSet(set, a) { if (a <= 0) return; const i0 = Math.max(0, Math.min(N - 1, Math.floor(st.f))), i1 = Math.min(N - 1, i0 + 1), t = st.f - i0;
     const A = frames[set][i0], B = frames[set][i1], k = Math.min(1, Math.max(0, (t - 0.32) / 0.36)), w = k * k * (3 - 2 * k); /* a short blend in the middle of each step keeps the picture crisp, without double images */
