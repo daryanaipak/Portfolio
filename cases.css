@@ -142,6 +142,12 @@
 /* each side of a turning leaf shows only from its own side, so the page never appears mirrored mid-turn */
 :is(#reader,#player,#viewer) .leaf .face { position: absolute; inset: 0; backface-visibility: hidden; -webkit-backface-visibility: hidden; }
 :is(#reader,#player,#viewer) .leaf .face.back { transform: rotateY(180deg); }
+/* Safari ignores backface-visibility for rotated or layered content inside a page, so the two sides are also swapped by hand
+   at the moment the leaf stands upright (90°): 0.36s into the 0.95s turn, 0.66s into the single-page fold-away */
+:is(#reader,#player,#viewer) .leaf .face.back { visibility: hidden; }
+:is(#reader,#player,#viewer) .leaf.go .face.front { visibility: hidden; transition: visibility 0s linear 0.36s; }
+:is(#reader,#player,#viewer) .leaf.go .face.back { visibility: visible; transition: visibility 0s linear 0.36s; }
+:is(#reader,#player,#viewer) .book.single .leaf.go .face.front { transition-delay: 0.66s; }
 :is(#reader,#player,#viewer) .book.single .leaf.fwd { left: 0; }
 :is(#reader,#player,#viewer) .leaf.fwd.go { transform: rotateY(-180deg); }
 :is(#reader,#player,#viewer) .leaf.bwd { left: 0; transform-origin: 100% 50%; }
