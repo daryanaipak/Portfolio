@@ -66,11 +66,11 @@
   /* laptops and tablets in landscape: the name runs across the page as a masthead under the centred menu, the room stands in front of it,
      and a lens beside the day/night switch zooms the room in over the name */
   @media (min-width: 861px) {
-    :root { --fs: min(18.25vw, 29.2vh); }
-    .intro { grid-column: 1 / -1; grid-row: 1; align-self: stretch; top: 0; z-index: 1; padding: calc(68px + 1.78 * var(--fs)) 16px 32px max(clamp(24px, 5vw, 88px), env(safe-area-inset-left, 0px)); }
+    :root { --fs: min(20.2vw, 32.35vh); --nt: max(68px + 0.41 * var(--fs), 14px + 0.59 * var(--fs)); } /* --nt keeps the dot of the i under the menu and the d clear of the top edge */
+    .intro { grid-column: 1 / -1; grid-row: 1; align-self: stretch; top: 0; z-index: 1; padding: calc(var(--nt) + 1.24 * var(--fs)) 16px 32px max(clamp(24px, 5vw, 88px), env(safe-area-inset-left, 0px)); }
     .intro > :not(.name) { max-width: min(440px, 36vw); }
     .role { font-size: clamp(0.66rem, 0.9vw, 0.8rem); letter-spacing: clamp(0.14em, 1.6vw - 0.6em, 0.26em); }
-    .name { position: absolute; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 68px + 0.41 * var(--fs)); font-size: var(--fs); line-height: 1; padding: 0; text-align: center; pointer-events: none; }
+    .name { position: absolute; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + var(--nt)); font-size: var(--fs); line-height: 1; padding: 0 0.04em 0 0; letter-spacing: -0.04em; text-align: center; pointer-events: none; }
     .stagebox { grid-column: 2; grid-row: 1; z-index: 2; margin-top: calc(env(safe-area-inset-top, 0px) + 78px); margin-bottom: 34px; }
     .top { left: 0; right: 0; align-items: center; pointer-events: none; }
     .top > * { pointer-events: auto; }
