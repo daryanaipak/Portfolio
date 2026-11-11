@@ -417,8 +417,8 @@
   let firstLoaded = 0;
   fetch('frames/masks.json').then(r => r.json()).then(j => { META = j; IW = j.w; IH = j.h; N = j.n; total = N * 3; resize(); loadAll(); });
   let box = { x: 0, y: 0, w: 1, h: 1 }, dpr = 1;
-  /* zoom: on wide screens the room first stands at 84% so more of the name shows; the lens grows it to full size, its floor staying put */
-  const zoom = { k: 0.84 };
+  /* zoom: on wide screens the room first stands at 76% so more of the name shows; the lens grows it to full size, its floor staying put */
+  const ZOOM_OUT = 0.76, zoom = { k: ZOOM_OUT };
   function resize() { const r = canvas.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); layoutBox(); }
   function layoutBox() { const r = canvas.getBoundingClientRect();
     /* size the room by the room itself, not by its picture: the frames keep a transparent margin of about 7% at the sides and the room fills about 3%-92.5% of their height */
@@ -565,7 +565,7 @@
   const lensBtn = $('#lens');
   lensBtn.addEventListener('click', () => { const on = lensBtn.getAttribute('aria-pressed') !== 'true'; lensBtn.setAttribute('aria-pressed', on);
     lensBtn.setAttribute('aria-label', on ? 'Zoom out of the room' : 'Zoom into the room');
-    gsap.to(zoom, { k: on ? 1 : 0.84, duration: 0.9 * D, ease: 'power2.inOut', overwrite: true, onUpdate: layoutBox, onComplete: layoutBox }); });
+    gsap.to(zoom, { k: on ? 1 : ZOOM_OUT, duration: 0.9 * D, ease: 'power2.inOut', overwrite: true, onUpdate: layoutBox, onComplete: layoutBox }); });
   function enter(s, from) {
     const hero = sheet.querySelector('.hero'), tl = gsap.timeline();
     tl.fromTo('#scrim', { opacity: 0 }, { opacity: 1, duration: 0.5 * D }, 0).fromTo(['.cu-bar', '#cuClose'], { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.5 * D }, 0.15 * D);
