@@ -39,7 +39,8 @@
   .wrap { position: relative; height: 100%; display: grid; grid-template-columns: minmax(0, 0.8fr) minmax(0, 1.3fr); }
   .intro { align-self: center; padding: 96px 16px 32px max(clamp(24px, 5vw, 88px), env(safe-area-inset-left, 0px)); position: relative; top: -40px; z-index: 3; }
   .name { font: 400 clamp(3rem, min(6.4vw, 11.2vh), 7.4rem)/1.15 var(--display); margin: 0; padding: 0.22em 0.08em 0.34em 0.06em; white-space: nowrap; }
-  .role { font: 400 clamp(1.25rem, min(2.1vw, 3.6vh), 2.3rem)/1.15 var(--display); margin: 0 0 0.35rem; padding: 0.2em 0.06em 0.05em; color: var(--title); white-space: nowrap; }
+  /* the job title is a solid tag in the accent colour, set straight under the name */
+  .role { display: inline-block; font: 800 0.8rem/1 var(--body); letter-spacing: 0.26em; text-transform: uppercase; padding: 0.75em 1em 0.7em 1.26em; margin: 0 0 1.5rem; background: var(--title); color: var(--bg-deep); box-shadow: 0 3px 10px rgba(0, 0, 0, 0.25); white-space: nowrap; }
   /* the headline is the positioning statement, the line beneath explains it */
   .slogan { font-size: clamp(0.95rem, 1.05vw, 1.05rem); line-height: 1.6; max-width: 440px; margin: 0; color: var(--ink-soft); }
   .slogan b { display: block; margin-bottom: 0.9rem; font-weight: 800; font-size: clamp(1.3rem, 1.55vw, 1.55rem); line-height: 1.25; letter-spacing: -0.005em; color: var(--ink); }
@@ -61,6 +62,25 @@
   .mode .knob { position: absolute; left: 4px; right: 4px; top: 4px; height: calc(50% - 4px); border-radius: 24px; background: var(--accent); transition: transform 0.6s cubic-bezier(0.6, 0, 0.2, 1), background 0.6s; }
   :root[data-mode="night"] .mode .knob { transform: translateY(100%); background: #b9c9cf; }
   .mode svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 1.6; stroke-linecap: round; }
+  .lens { display: none; }
+  /* laptops and tablets in landscape: the name runs across the page as a masthead under the centred menu, the room stands in front of it,
+     and a lens beside the day/night switch zooms the room in over the name */
+  @media (min-width: 861px) {
+    :root { --fs: min(18.25vw, 29.2vh); }
+    .intro { grid-column: 1 / -1; grid-row: 1; align-self: stretch; top: 0; z-index: 1; padding: calc(68px + 1.78 * var(--fs)) 16px 32px max(clamp(24px, 5vw, 88px), env(safe-area-inset-left, 0px)); }
+    .intro > :not(.name) { max-width: min(440px, 36vw); }
+    .role { font-size: clamp(0.66rem, 0.9vw, 0.8rem); letter-spacing: clamp(0.14em, 1.6vw - 0.6em, 0.26em); }
+    .name { position: absolute; left: 0; right: 0; top: calc(env(safe-area-inset-top, 0px) + 68px + 0.41 * var(--fs)); font-size: var(--fs); line-height: 1; padding: 0; text-align: center; pointer-events: none; }
+    .stagebox { grid-column: 2; grid-row: 1; z-index: 2; margin-top: calc(env(safe-area-inset-top, 0px) + 78px); margin-bottom: 34px; }
+    .top { left: 0; right: 0; align-items: center; pointer-events: none; }
+    .top > * { pointer-events: auto; }
+    .mode { position: fixed; right: max(24px, env(safe-area-inset-right, 0px)); top: calc(50% - 52px); }
+    .lens { display: grid; place-items: center; position: fixed; z-index: 20; right: max(24px, env(safe-area-inset-right, 0px)); top: calc(50% + 64px); width: 54px; height: 54px; padding: 0; border-radius: 50%; border: 1.5px solid var(--btn-ink); background: color-mix(in srgb, var(--card) 70%, transparent); color: var(--btn-ink); cursor: pointer; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px); transition: background 0.25s, color 0.25s, opacity 0.4s; }
+    .lens:hover { background: var(--accent); color: #2b1e16; border-color: #2b1e16; }
+    .lens svg { width: 26px; height: 26px; stroke: currentColor; fill: none; stroke-width: 1.7; stroke-linecap: round; }
+    .lens .plus { transition: opacity 0.3s; } .lens[aria-pressed="true"] .plus { opacity: 0; }
+    .lens.off { opacity: 0; pointer-events: none; }
+  }
 
   .hnote { position: fixed; z-index: 25; pointer-events: none; padding: 8px 14px 9px; background: #f6ecd6; color: #7e2a22; font: 800 0.92rem/1.2 var(--body); letter-spacing: 0.01em; white-space: nowrap; transform-origin: 50% 100%; text-align: center;
     clip-path: polygon(0 4%, 9% 0, 22% 3%, 38% 0, 55% 4%, 71% 0, 86% 3%, 100% 0, 98% 30%, 100% 62%, 97% 100%, 78% 96%, 60% 100%, 41% 97%, 24% 100%, 6% 96%, 2% 100%, 0 70%, 3% 38%); filter: drop-shadow(0 8px 10px rgba(0, 0, 0, 0.35)); }
@@ -249,6 +269,7 @@
   @media (max-width: 860px) {
     body { overflow: auto; }
     .wrap { grid-template-columns: 1fr; grid-template-rows: auto minmax(380px, 64svh); height: auto; min-height: 100%; }
+    .role { font-size: 0.66rem; letter-spacing: 0.14em; padding: 0.8em 0.9em 0.75em 1.04em; margin-bottom: 1.2rem; }
     .intro { top: 0; padding: 118px max(16px, env(safe-area-inset-right, 0px)) 4px max(16px, env(safe-area-inset-left, 0px)); }
     .top { left: max(16px, env(safe-area-inset-left, 0px)); right: max(16px, env(safe-area-inset-right, 0px)); flex-direction: row; justify-content: space-between; align-items: center; }
     .menu-btn { display: block; }
@@ -313,6 +334,7 @@
     <span><svg viewBox="0 0 26 26"><path d="M17.5 4.5 A 9 9 0 1 0 21.5 17 A 7.2 7.2 0 0 1 17.5 4.5 Z"/></svg></span>
   </button>
 </header>
+<button class="lens" id="lens" type="button" aria-label="Zoom into the room" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5"/><path d="M15.5 15.5 21 21M8 10.5h5"/><path class="plus" d="M10.5 8v5"/></svg></button>
 
 <div class="hnote" id="hnote" hidden></div>
 <div class="closeup" id="closeup" hidden role="dialog" aria-modal="true" aria-labelledby="cuTitle">
@@ -395,10 +417,14 @@
   let firstLoaded = 0;
   fetch('frames/masks.json').then(r => r.json()).then(j => { META = j; IW = j.w; IH = j.h; N = j.n; total = N * 3; resize(); loadAll(); });
   let box = { x: 0, y: 0, w: 1, h: 1 }, dpr = 1;
-  function resize() { const r = canvas.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr);
+  /* zoom: on wide screens the room first stands at 84% so more of the name shows; the lens grows it to full size, its floor staying put */
+  const zoom = { k: 0.84 };
+  function resize() { const r = canvas.getBoundingClientRect(); dpr = Math.min(2, devicePixelRatio || 1); canvas.width = Math.round(r.width * dpr); canvas.height = Math.round(r.height * dpr); layoutBox(); }
+  function layoutBox() { const r = canvas.getBoundingClientRect();
     /* size the room by the room itself, not by its picture: the frames keep a transparent margin of about 7% at the sides and the room fills about 3%-92.5% of their height */
     const narrow = innerWidth < 861, CW = 0.86, CH = 0.895, s = Math.min(r.width * (narrow ? 0.98 : 0.99) / (IW * CW), (r.height - (narrow ? 16 : 24)) / (IH * CH));
-    box.w = IW * s; box.h = IH * s; box.x = (r.width - box.w) / 2 + (narrow ? 0 : r.width * 0.01); box.y = (r.height - box.h * CH) / 2 - box.h * 0.03 + (narrow ? 4 : 8);
+    box.w = IW * s; box.h = IH * s; box.x = (r.width - box.w) / 2 + (narrow ? 0 : r.width * 0.01); box.y = (r.height - box.h * CH) / 2 - box.h * 0.03 + (narrow ? 4 : -6);
+    const z = narrow ? 1 : zoom.k; if (z !== 1) { const cx = box.x + box.w / 2, foot = box.y + box.h * (0.03 + CH); box.w *= z; box.h *= z; box.x = cx - box.w / 2; box.y = foot - box.h * (0.03 + CH); }
     draw(); }
   addEventListener('resize', resize);
   const ok = i => i && i.complete && i.naturalWidth;
@@ -536,6 +562,10 @@
         <div class="row"><button class="btn dark" type="button" id="copyMail">Copy email</button><a class="btn lite" href="https://www.linkedin.com/in/darya-naipak" target="_blank" rel="noopener">Open LinkedIn</a></div><p class="toast" id="toast" aria-live="polite"></p></div></div>`
   };
   const D = reduce ? 0 : 1;
+  const lensBtn = $('#lens');
+  lensBtn.addEventListener('click', () => { const on = lensBtn.getAttribute('aria-pressed') !== 'true'; lensBtn.setAttribute('aria-pressed', on);
+    lensBtn.setAttribute('aria-label', on ? 'Zoom out of the room' : 'Zoom into the room');
+    gsap.to(zoom, { k: on ? 1 : 0.84, duration: 0.9 * D, ease: 'power2.inOut', overwrite: true, onUpdate: layoutBox, onComplete: layoutBox }); });
   function enter(s, from) {
     const hero = sheet.querySelector('.hero'), tl = gsap.timeline();
     tl.fromTo('#scrim', { opacity: 0 }, { opacity: 1, duration: 0.5 * D }, 0).fromTo(['.cu-bar', '#cuClose'], { opacity: 0, y: -12 }, { opacity: 1, y: 0, duration: 0.5 * D }, 0.15 * D);
@@ -598,14 +628,14 @@
   function open(s) { openedAt = performance.now(); lastFocus = document.activeElement; menuSet(false); clearGlow(); opened = s; const from = secRect(s);
     cu.classList.toggle('noscroll', s === 'pinboard');
     cuTitle.textContent = TITLES[s]; (document.fonts ? document.fonts.ready : Promise.resolve()).then(() => requestAnimationFrame(alignBack)); sheet.innerHTML = VIEWS[s](); cu.hidden = false; cu.scrollTop = 0; document.body.style.overflow = 'hidden';
-    wire(s); gsap.to('.intro', { opacity: 0, x: -30, duration: 0.5 * D }); requestAnimationFrame(() => enter(s, from)); cuClose.focus({ preventScroll: true });
+    wire(s); gsap.to('.intro', { opacity: 0, x: -30, duration: 0.5 * D }); lensBtn.classList.add('off'); requestAnimationFrame(() => enter(s, from)); cuClose.focus({ preventScroll: true });
     document.querySelectorAll('[data-go]').forEach(b => b.setAttribute('aria-current', String(b.dataset.go === s))); }
   function back() { if (!reader.hidden) $('#closeBook').click(); if (cu.hidden) return; clearGlow(); const s = opened, to = secRect(s), t = sheet.firstElementChild;
     const r = t.getBoundingClientRect();
     gsap.timeline({ onComplete: () => { cu.hidden = true; sheet.innerHTML = ''; gsap.set([t], { clearProps: 'all' }); document.body.style.overflow = ''; } })
       .to(t, { x: to.x + to.w / 2 - (r.left + r.width / 2), y: to.y + to.h / 2 - (r.top + r.height / 2), scale: Math.max(0.06, Math.min(to.w / r.width, to.h / r.height)), opacity: 0, duration: 0.6 * D, ease: 'power3.in' }, 0)
       .to('#scrim', { opacity: 0, duration: 0.5 * D }, 0.15 * D).to(['.cu-bar', '#cuClose'], { opacity: 0, duration: 0.3 * D }, 0);
-    gsap.to('.intro', { opacity: 1, x: 0, duration: 0.6 * D, delay: 0.3 * D });
+    gsap.to('.intro', { opacity: 1, x: 0, duration: 0.6 * D, delay: 0.3 * D }); lensBtn.classList.remove('off');
     document.querySelectorAll('[data-go]').forEach(b => b.removeAttribute('aria-current')); if (lastFocus && lastFocus.focus) lastFocus.focus({ preventScroll: true }); }
   /* a phone sends its click a moment after the tap that opened the section: ignore background taps right after opening */
   cuClose.addEventListener('click', back); $('#scrim').addEventListener('click', () => { if (performance.now() - openedAt > 500) back(); });
