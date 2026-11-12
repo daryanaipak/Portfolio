@@ -48,7 +48,7 @@ const BROCHURES = {
   tripLondon: { title: 'London, Covent Garden', pages: ['img/trip-london-full.jpg'] },
   tripBarcelona: { title: 'Barcelona, Sagrada Família', pages: ['img/trip-barcelona-full.jpg'] },
   linkedin: { title: 'LinkedIn · Masters in Business Analytics & AI in Amsterdam', pages: ['img/linkedin-ai-trip.jpg'] },
-  tripKiss: { title: 'Barcelona, the kiss mural', pages: ['img/trip-kiss-full.jpg'] },
+  tripChicago: { title: 'Chicago, Cloud Gate', pages: ['img/trip-chicago-full.jpg'] },
   flowMasters: { title: 'Masters · conversational ad flow', pages: ['img/flow-masters.jpg'] },
   flowMba: { title: 'MBA · conversational ad flow', pages: ['img/flow-mba.jpg'] },
   experience: { title: 'Experience Vlerick Business School', pages: ['brochures/experience/p-01.jpg', 'brochures/experience/p-02.jpg', 'brochures/experience/p-03.jpg', 'brochures/experience/p-04.jpg', 'brochures/experience/p-05.jpg', 'brochures/experience/p-06.jpg', 'brochures/experience/p-07.jpg', 'brochures/experience/p-08.jpg', 'brochures/experience/p-09.jpg', 'brochures/experience/p-10.jpg', 'brochures/experience/p-11.jpg', 'brochures/experience/p-12.jpg', 'brochures/experience/p-13.jpg', 'brochures/experience/p-14.jpg', 'brochures/experience/p-15.jpg', 'brochures/experience/p-16.jpg', 'brochures/experience/p-17.jpg', 'brochures/experience/p-18.jpg', 'brochures/experience/p-19.jpg', 'brochures/experience/p-20.jpg', 'brochures/experience/p-21.jpg', 'brochures/experience/p-22.jpg', 'brochures/experience/p-23.jpg', 'brochures/experience/p-24.jpg'] }
